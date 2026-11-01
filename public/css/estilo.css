@@ -121,6 +121,8 @@ body {
   font-size: 80px;
   margin: 0 0 10px;
   line-height: 1;
+  /* leve inclinação pra lembrar um título escrito à mão, recortado e colado */
+  transform: rotate(-2deg);
 }
 
 .banner .banner_conteudo p {
@@ -222,6 +224,19 @@ body {
   box-sizing: border-box;
 }
 
+/* cada card com uma leve rotação diferente, pra parecer recorte colado em vez de grade perfeita */
+.historia_card:nth-child(1) {
+  transform: rotate(-2deg);
+}
+
+.historia_card:nth-child(2) {
+  transform: rotate(1deg);
+}
+
+.historia_card:nth-child(3) {
+  transform: rotate(-1deg);
+}
+
 .historia_icone {
   width: 24px;
   margin-bottom: 14px;
@@ -247,9 +262,51 @@ body {
   line-height: 1.2;
 }
 
+/* SOBRE MIM */
+
+.sobre {
+  background-color: #14110F;
+  display: flex;
+  padding: 20px 0 50px;
+}
+
+.sobre .container {
+  align-items: center;
+  gap: 32px;
+}
+
+.sobre_foto {
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+  background-color: #3B2A1E;
+  border: 2px solid #D9381E;
+  transform: rotate(-2deg);
+}
+
+.sobre_texto h4 {
+  color: #F2B705;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 28px;
+  margin: 0 0 10px;
+}
+
+.sobre_texto p {
+  color: #F1E9D8;
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 0;
+  max-width: 60ch;
+}
+
 @media (max-width: 900px) {
   .ultimas_historias_cards {
     flex-wrap: wrap;
+  }
+
+  .sobre .container {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .historia_card {
@@ -401,8 +458,6 @@ body {
 
 .login {
   height: var(--tamanho-login);
-  background-image: url('../assets/imgs/bg-jelly-fish-para-home.png');
-  background-size: cover;
 }
 
 .login .container {
@@ -444,16 +499,6 @@ body {
 
 .formulario input {
   border: 2px solid #32b9cd;
-  text-align: center;
-  border-radius: 10px;
-  margin: 0;
-}
-
-.formulario select {
-  border: 2px solid #32b9cd;
-  background-color: white;
-  color: gray;
-  height: 36px;
   text-align: center;
   border-radius: 10px;
   margin: 0;
@@ -519,36 +564,12 @@ body {
   font-size: 20px;
 }
 
-.formulario .tipo_campo {
-  font-size: 20px;
-  font-weight: 600 !important;
-}
-
-.formulario {
-  display: flex;
-  flex-direction: column;
-}
-
 input {
   margin-bottom: 10px;
   border: 2px solid #32b9cd;
   padding: 10px;
   text-align: center;
   border-radius: 10px;
-}
-
-.btn {
-  font-family: "Barlow", sans-serif;
-  border: 0;
-  border-radius: 5px;
-  font-weight: 600;
-  font-size: 18px;
-  padding: 10px 15px;
-  color: white;
-  background-color: #ED145B;
-  width: 120px;
-  align-self: center;
-  margin-top: 5px;
 }
 
 .pagina_login {

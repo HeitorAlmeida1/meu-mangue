@@ -100,7 +100,7 @@
 <script>
 
   function cadastrar() {
-    // aguardar();
+    aguardar();
 
     //Recupere o valor da nova input pelo nome do id
     // Agora vá para o método fetch logo abaixo
@@ -153,7 +153,6 @@
             window.location = "login.html";
           }, "2000");
 
-          limparFormulario();
           finalizarAguardar();
         } else {
           throw "Houve um erro ao tentar realizar o cadastro!";
