@@ -24,7 +24,6 @@ body {
 
 .header {
   height: var(--tamanho-header);
-  border-bottom: 4px dotted #D9381E
 }
 
 .header .container {
@@ -90,37 +89,21 @@ body {
   font-family: 'Permanent Marker', cursive;
 }
 
-.recorte span {
-  display: inline-block;
+.recorte .cor1 {
+  color: #F2B705;
 }
 
-.recorte span:nth-child(odd) {
-  font-family: 'Permanent Marker', cursive;
-  transform: rotate(-4deg);
-}
-
-.recorte span:nth-child(even) {
-  font-family: 'Special Elite', monospace;
+.recorte .cor2 {
   color: #F1E9D8;
-  transform: rotate(3deg);
-  font-size: 0.85em;
 }
 
-.recorte span:nth-child(3n) {
+.recorte .cor3 {
   color: #D9381E;
-  transform: rotate(-6deg);
 }
 
 .faixa_divisoria {
   height: 10px;
   background-color: #3B2A1E;
-  background-image: repeating-linear-gradient(
-    135deg,
-    #14110F 0px,
-    #14110F 2px,
-    transparent 2px,
-    transparent 6px
-  );
   border-top: 2px dashed #D9381E;
   border-bottom: 2px dashed #D9381E;
 }
@@ -146,28 +129,6 @@ body {
   width: 340px;
   height: 340px;
   opacity: 0.12;
-  pointer-events: none;
-}
-
-.selo {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  width: 110px;
-  height: 110px;
-  border: 2px solid #F2B705;
-  border-radius: 50%;
-  outline: 1px dashed #F2B705;
-  outline-offset: -6px;
-  color: #F2B705;
-  font-family: 'Special Elite', monospace;
-  font-size: 12px;
-  text-transform: uppercase;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: rotate(-10deg);
 }
 
 .banner .container {
@@ -191,7 +152,6 @@ body {
   font-size: 80px;
   margin: 0 0 10px;
   line-height: 1;
-  transform: rotate(-2deg);
 }
 
 .banner .banner_conteudo p {
@@ -214,8 +174,7 @@ body {
 }
 
 .banner .banner_conteudo button:hover {
-  transform: translate(4px, 4px);
-  box-shadow: 4px 4px 0 #D9381E;
+  background-color: #D9A204;
 }
 
 .banner_imagem_card {
@@ -226,7 +185,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: rotate(3deg);
   flex-shrink: 0;
 }
 
@@ -234,7 +192,6 @@ body {
   width: 65%;
   height: auto;
   object-fit: contain;
-  transform: rotate(-3deg);
 }
 
 @media (max-width: 900px) {
@@ -260,40 +217,17 @@ body {
 }
 
 .historia_card,
-.card_historia,
-.card_login_mangue {
-  position: relative;
+.card_historia {
+  text-decoration: none;
+  cursor: pointer;
+  border-top: 4px solid #F2B705;
 }
 
-.historia_card::before,
-.historia_card::after,
-.card_historia::before,
-.card_historia::after,
-.card_login_mangue::before,
-.card_login_mangue::after {
-  content: "";
-  position: absolute;
-  top: -6px;
-  left: -6px;
-  width: 22px;
-  height: 3px;
-  background-color: #F2B705;
-  border-radius: 2px;
-}
-
-.historia_card::before,
-.card_historia::before,
-.card_login_mangue::before {
-  transform: rotate(35deg);
-  transform-origin: left center;
-}
-
-.historia_card::after,
-.card_historia::after,
-.card_login_mangue::after {
-  top: 2px;
-  transform: rotate(-20deg);
-  transform-origin: left center;
+.autor_historia {
+  color: #F2B705;
+  font-size: 13px;
+  margin-top: auto;
+  padding-top: 8px;
 }
 
 .social {
@@ -331,18 +265,6 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-}
-
-.historia_card:nth-child(1) {
-  transform: rotate(-2deg);
-}
-
-.historia_card:nth-child(2) {
-  transform: rotate(1deg);
-}
-
-.historia_card:nth-child(3) {
-  transform: rotate(-1deg);
 }
 
 .historia_icone {
@@ -387,7 +309,6 @@ body {
   flex-shrink: 0;
   background-color: #3B2A1E;
   border: 2px solid #D9381E;
-  transform: rotate(-2deg);
 }
 
 .sobre_texto h4 {
@@ -502,14 +423,6 @@ body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-}
-
-.card_historia:nth-child(odd) {
-  transform: rotate(-1.5deg);
-}
-
-.card_historia:nth-child(even) {
-  transform: rotate(1.5deg);
 }
 
 .card_historia img {
@@ -742,7 +655,6 @@ input {
   align-items: flex-start;
   justify-content: flex-start;
   padding: 24px;
-  transform: rotate(-1deg);
 }
 
 .pagina_login .card_login_mangue h2 {
@@ -789,8 +701,7 @@ input {
 }
 
 .pagina_login .botao_login_mangue:hover {
-  transform: translate(3px, 3px);
-  box-shadow: 3px 3px 0 #D9381E;
+  background-color: #D9A204;
 }
 
 .pagina_login .link_cadastro_login {
@@ -818,12 +729,10 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: rotate(3deg);
 }
 
 .pagina_login .card_logo_login img {
   width: 65%;
-  transform: rotate(-3deg);
 }
 
 .pagina_login .frase_logo {
@@ -868,6 +777,221 @@ input {
 .loading-div img {
   height: 50px;
   width: 50px;
+}
+
+.pagina_formulario {
+  background-color: #14110F;
+  min-height: calc(100vh - var(--tamanho-header) - var(--tamanho-footer));
+  padding: 34px 0 50px;
+}
+
+.pagina_formulario .container {
+  justify-content: center;
+}
+
+.card_formulario {
+  width: 100%;
+  max-width: 700px;
+  box-sizing: border-box;
+  background-color: #3B2A1E;
+  border: 2px solid #F1E9D8;
+  padding: 32px;
+}
+
+.card_formulario h2 {
+  margin: 0 0 24px;
+  color: #F2B705;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 44px;
+}
+
+.card_formulario .campo {
+  margin-bottom: 18px;
+  padding: 0;
+}
+
+.card_formulario .campo span {
+  display: block;
+  margin-bottom: 6px;
+  color: #F1E9D8;
+  font-size: 16px;
+}
+
+.card_formulario input,
+.card_formulario select,
+.card_formulario textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  background-color: #F1E9D8;
+  color: #14110F;
+  font-family: 'Special Elite', monospace;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.card_formulario textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.card_formulario button {
+  margin-top: 8px;
+  width: 100%;
+  height: 56px;
+  border: none;
+  background-color: #F2B705;
+  color: #14110F;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 22px;
+  box-shadow: 6px 6px 0 #D9381E;
+  cursor: pointer;
+}
+
+.card_formulario button:hover {
+  background-color: #D9A204;
+}
+
+@media (max-width: 700px) {
+  .card_formulario {
+    padding: 20px;
+  }
+}
+
+.pagina_detalhe {
+  background-color: #14110F;
+  padding: 34px 0 50px;
+}
+
+.pagina_detalhe .container {
+  flex-direction: column;
+  align-items: center;
+}
+
+.detalhe_card {
+  width: 100%;
+  max-width: 800px;
+  box-sizing: border-box;
+  background-color: #3B2A1E;
+  border: 2px solid #F1E9D8;
+  padding: 32px;
+}
+
+.detalhe_musica {
+  margin: 10px 0 2px;
+  color: #FFFFFF;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 34px;
+  line-height: 1.1;
+}
+
+.detalhe_artista {
+  color: #DCDCDC;
+  font-size: 16px;
+}
+
+.detalhe_autor {
+  display: block;
+  color: #F2B705;
+  font-size: 14px;
+  margin: 6px 0 24px;
+}
+
+.detalhe_texto {
+  color: #F1E9D8;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.detalhe_acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.detalhe_acoes button {
+  cursor: pointer;
+  font-family: 'Special Elite', monospace;
+  font-size: 14px;
+  color: #F1E9D8;
+  background-color: #14110F;
+  border: 1px solid #F1E9D8;
+  padding: 10px 16px;
+}
+
+.btn_favoritar.favoritada {
+  background-color: #2E6B3F;
+  border-color: #2E6B3F;
+}
+
+.detalhe_acoes .btn_apagar {
+  border-color: #D9381E;
+  color: #D9381E;
+}
+
+.comentarios {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 40px;
+}
+
+.comentarios h3 {
+  color: #F2B705;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 28px;
+  margin: 0 0 16px;
+}
+
+.form_comentario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.form_comentario textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 80px;
+  border: none;
+  background-color: #F1E9D8;
+  color: #14110F;
+  font-family: 'Special Elite', monospace;
+  font-size: 15px;
+  padding: 10px;
+  resize: vertical;
+}
+
+.form_comentario button {
+  align-self: flex-start;
+  cursor: pointer;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 16px;
+  color: #14110F;
+  background-color: #F2B705;
+  border: none;
+  padding: 10px 20px;
+  box-shadow: 4px 4px 0 #D9381E;
+}
+
+.comentario_item {
+  border-top: 1px dashed #D9381E;
+  padding: 14px 0;
+}
+
+.comentario_item .comentario_autor {
+  display: block;
+  color: #F2B705;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.comentario_item p {
+  margin: 0;
+  color: #F1E9D8;
+  font-size: 16px;
+  line-height: 1.4;
 }
 
 .simulador {

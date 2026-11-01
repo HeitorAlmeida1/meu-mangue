@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MEU MANGUE 🦀</title>
+
+    <script src="./js/sessao.js"></script>
+
+    <link rel="stylesheet" href="./css/estilo.css">
+    <link rel="icon" href="./assets/caranguejo_transparente.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="header">
+      <div class="container">
+        <h1 class="titulo"><img class="logo-titulo" src="assets/caranguejo_transparente.png" alt="logo_caranguejo">MEU <span class="recorte"><span>M</span><span>A</span><span>N</span><span>G</span><span>U</span><span>E</span></span></h1>
+        <ul class="navbar">
+          <li>
+            <a href="index.html">Home</a>
+          </li>
+          <li class="agora">
+            <a href="historias.html">Histórias</a>
+          </li>
+          <li>
+            <a href="login.html">Login</a>
+          </li>
+          <li>
+            <a href="cadastro.html">Cadastro</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faixa_divisoria"></div>
+
+    <div class="pagina_detalhe">
+        <div class="container">
+            <div class="detalhe_card">
+                <span class="tag_fase">[Fase da vida]</span>
+                <h1 class="detalhe_musica">[Nome da música]</h1>
+                <span class="detalhe_artista">[Artista] &middot; [data]</span>
+                <span class="detalhe_autor">Por [Autor]</span>
+
+                <p class="detalhe_texto">[Texto completo da história. Aqui entra o relato inteiro, não só o trecho curto que aparece nos cards das outras telas.]</p>
+
+                <div class="detalhe_acoes">
+                    <button class="btn_favoritar" id="btn_favoritar" onclick="favoritar()">&hearts; Favoritar</button>
+                    <button class="btn_editar" id="btn_editar" onclick="editarHistoria()">Editar</button>
+                    <button class="btn_apagar" id="btn_apagar" onclick="apagarHistoria()">Apagar</button>
+                </div>
+            </div>
+
+            <div class="comentarios">
+                <h3>Comentários</h3>
+
+                <div class="form_comentario">
+                    <textarea id="comentario_input" placeholder="Escreva um comentário..."></textarea>
+                    <button onclick="comentar()">Comentar</button>
+                </div>
+
+                <div id="lista_comentarios">
+                    <div class="comentario_item">
+                        <span class="comentario_autor">[Autor do comentário]</span>
+                        <p>[Texto do comentário...]</p>
+                    </div>
+
+                    <div class="comentario_item">
+                        <span class="comentario_autor">[Autor do comentário]</span>
+                        <p>[Texto do comentário...]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <h4>Projeto acadêmico sem fins lucrativos. 2026/2</h4>
+            <p class="footer_credito">Inspirado no Manguebeat de Chico Science &amp; Nação Zumbi.</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+    var idHistoria = new URLSearchParams(window.location.search).get("id");
+
+    function favoritar() {
+        btn_favoritar.classList.toggle("favoritada");
+        console.log("Favoritar/desfavoritar história de id:", idHistoria);
+    }
+
+    function editarHistoria() {
+        sessionStorage.ID_HISTORIA_EDITANDO = idHistoria;
+        window.location = "nova-historia.html";
+    }
+
+    function apagarHistoria() {
+        console.log("Apagar história de id:", idHistoria);
+    }
+
+    function comentar() {
+        console.log("Comentário:", comentario_input.value, "na história de id:", idHistoria);
+    }
+
+</script>
