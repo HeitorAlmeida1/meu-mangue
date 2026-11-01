@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./css/estilo.css">
     <link rel="icon" href="./assets/caranguejo_transparente.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -40,26 +41,28 @@
     </div>
 
 
-    <div class="login">
+    <div class="login pagina_login">
         <div class="alerta_erro">
             <div class="card_erro" id="cardErro">
                 <span id="mensagem_erro"></span>
             </div>
         </div>
-        <div class="container">
-            <div class="card card-login">
-                <h2>Olá de volta!</h2>
-                <div class="formulario">
+        <div class="container login_layout">
+            <div class="card card-login card_login_mangue">
+                <h2>Entrar</h2>
+                <div class="formulario formulario_login_mangue">
                     <div class="campo">
-                        <span>E-mail:</span>
-                        <input id="email_input" type="text" placeholder="Login">
+                        <span>E-mail</span>
+                        <input id="email_input" type="text" placeholder="">
                     </div>
                     <div class="campo">
-                        <span>Senha:</span>
-                        <input id="senha_input" type="password" placeholder="******">
+                        <span>Senha</span>
+                        <input id="senha_input" type="password" placeholder="">
                     </div>
-                    <button class="botao" onclick="entrar()">Entrar</button>
+                    <button class="botao botao_login_mangue" onclick="entrar()">Entrar</button>
                 </div>
+
+                <a class="link_cadastro_login" href="cadastro.html">Não tem conta? Cadastre-se</a>
 
                 <div id="div_aguardar" class="loading-div">
                     <img src="./assets/circle-loading.gif" id="loading-gif">
@@ -67,13 +70,17 @@
 
                 <div id="div_erros_login"></div>
             </div>
+
+            <div class="card_logo_login">
+              <img src="assets/caranguejo_transparente.png" alt="logo caranguejo">
+            </div>
         </div>
     </div>
 
     <!--footer inicio-->
     <div class="footer">
         <div class="container">
-            <h4>Feito com amor por aluno &hearts; SPTech &copy; 2023-2026</h4>
+            <h4>Projeto acadêmico sem fins lucrativos. 2026/2</h4>
         </div>
     </div>
     <!--footer fim-->

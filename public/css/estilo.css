@@ -551,6 +551,111 @@ input {
   margin-top: 5px;
 }
 
+.pagina_login {
+  background-image: none;
+  background-color: #14110F;
+  min-height: calc(100vh - var(--tamanho-header) - var(--tamanho-footer));
+  padding: 26px 0 40px;
+}
+
+.pagina_login .login_layout {
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.pagina_login .card_login_mangue {
+  width: 62%;
+  background-color: #3B2A1E;
+  border: 2px solid #BDBDBD;
+  border-radius: 0;
+  color: #F1E9D8;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 24px;
+}
+
+.pagina_login .card_login_mangue h2 {
+  margin: 0 0 14px;
+  color: #F2B705;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 52px;
+}
+
+.pagina_login .formulario_login_mangue {
+  width: 100%;
+  gap: 8px;
+}
+
+.pagina_login .formulario_login_mangue span {
+  font-size: 38px;
+  font-weight: 400;
+  color: #F1E9D8;
+}
+
+.pagina_login .formulario_login_mangue input {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 0;
+  background-color: #F1E9D8;
+  text-align: left;
+  font-family: 'Special Elite', monospace;
+  font-size: 20px;
+  color: #14110F;
+}
+
+.pagina_login .botao_login_mangue {
+  width: 100%;
+  height: 56px;
+  margin-top: 14px;
+  border-radius: 0;
+  border: none;
+  background-color: #F2B705;
+  color: #14110F;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 34px;
+  box-shadow: 6px 6px 0 #D9381E;
+}
+
+.pagina_login .link_cadastro_login {
+  margin-top: 14px;
+  color: #F2B705;
+  font-size: 38px;
+}
+
+.pagina_login .card_logo_login {
+  width: 260px;
+  height: 260px;
+  border: 2px solid #D9381E;
+  background-color: #3B2A1E;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: rotate(3deg);
+}
+
+.pagina_login .card_logo_login img {
+  width: 65%;
+  transform: rotate(-3deg);
+}
+
+@media (max-width: 900px) {
+  .pagina_login .login_layout {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pagina_login .card_login_mangue {
+    width: 100%;
+  }
+
+  .pagina_login .card_logo_login {
+    width: 220px;
+    height: 220px;
+  }
+}
+
 .loading-div {
   width: 50px;
   margin: auto;
