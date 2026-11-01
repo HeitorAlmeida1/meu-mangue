@@ -90,18 +90,93 @@ body {
   font-family: 'Permanent Marker', cursive;
 }
 
+/* "MANGUE" com efeito de letras recortadas de jornal/fanzine: cada letra com
+   fonte, tamanho e rotação diferentes, como se tivessem sido coladas uma a uma */
+.recorte span {
+  display: inline-block;
+}
+
+.recorte span:nth-child(odd) {
+  font-family: 'Permanent Marker', cursive;
+  transform: rotate(-4deg);
+}
+
+.recorte span:nth-child(even) {
+  font-family: 'Special Elite', monospace;
+  color: #F1E9D8;
+  transform: rotate(3deg);
+  font-size: 0.85em;
+}
+
+.recorte span:nth-child(3n) {
+  color: #D9381E;
+  transform: rotate(-6deg);
+}
+
+/* faixa decorativa logo abaixo do cabeçalho, com uma textura de hachura
+   (linhas diagonais repetidas) lembrando xilogravura/cordel nordestino */
+.faixa_divisoria {
+  height: 10px;
+  background-color: #3B2A1E;
+  background-image: repeating-linear-gradient(
+    135deg,
+    #14110F 0px,
+    #14110F 2px,
+    transparent 2px,
+    transparent 6px
+  );
+  border-top: 2px dashed #D9381E;
+  border-bottom: 2px dashed #D9381E;
+}
+
 /* BANNER */
 
 .banner {
+  position: relative;
   height: 70vh;
   min-height: 420px;
-  color: white; 
+  color: white;
   background-image: url('../assets/marisa.png');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
   background-color: #14110F;
   flex-direction: column;
+  overflow: hidden;
+}
+
+/* ilustração grande da antena parabólica "fincada na lama" (símbolo clássico
+   do manifesto Manguebeat), bem apagada ao fundo do banner */
+.antena_ilustracao {
+  position: absolute;
+  right: -40px;
+  bottom: -40px;
+  width: 340px;
+  height: 340px;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+/* selinho tipo carimbo de borracha, levemente torto */
+.selo {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 110px;
+  height: 110px;
+  border: 2px solid #F2B705;
+  border-radius: 50%;
+  outline: 1px dashed #F2B705;
+  outline-offset: -6px;
+  color: #F2B705;
+  font-family: 'Special Elite', monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-10deg);
 }
 
 .banner .container {
@@ -193,6 +268,45 @@ body {
     width: 220px;
     height: 220px;
   }
+}
+
+/* "garra de caranguejo" decorativa no canto superior esquerdo dos cards principais:
+   dois tracinhos amarelos em ângulo, feitos só com pseudo-elementos (::before/::after) */
+.historia_card,
+.card_historia,
+.card_login_mangue {
+  position: relative;
+}
+
+.historia_card::before,
+.historia_card::after,
+.card_historia::before,
+.card_historia::after,
+.card_login_mangue::before,
+.card_login_mangue::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 22px;
+  height: 3px;
+  background-color: #F2B705;
+  border-radius: 2px;
+}
+
+.historia_card::before,
+.card_historia::before,
+.card_login_mangue::before {
+  transform: rotate(35deg);
+  transform-origin: left center;
+}
+
+.historia_card::after,
+.card_historia::after,
+.card_login_mangue::after {
+  top: 2px;
+  transform: rotate(-20deg);
+  transform-origin: left center;
 }
 
 /* ULTIMAS HISTORIAS */
@@ -356,8 +470,15 @@ body {
 
 .subtitulo_historias {
   color: #F1E9D8;
-  margin: 10px 0 24px;
+  margin: 10px 0 10px;
   font-size: 22px;
+}
+
+.epigrafe {
+  color: #F2B705;
+  font-size: 16px;
+  font-style: italic;
+  margin: 0 0 24px;
 }
 
 .filtros_historias {
@@ -490,12 +611,21 @@ body {
 }
 
 .footer .container {
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   text-align: center;
+  gap: 4px;
 }
 
 .footer .container .version {
   font-size: 12px;
+}
+
+.footer_credito {
+  margin: 0;
+  font-size: 13px;
+  color: #8A8A8A;
 }
 
 /* LOGIN */
@@ -731,6 +861,14 @@ input {
   max-width: 260px;
   opacity: 0.75;
   margin: 0;
+}
+
+.pagina_login .fonte_frase {
+  display: block;
+  color: #F2B705;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 4px;
 }
 
 @media (max-width: 900px) {
