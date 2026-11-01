@@ -90,8 +90,6 @@ body {
   font-family: 'Permanent Marker', cursive;
 }
 
-/* "MANGUE" com efeito de letras recortadas de jornal/fanzine: cada letra com
-   fonte, tamanho e rotação diferentes, como se tivessem sido coladas uma a uma */
 .recorte span {
   display: inline-block;
 }
@@ -113,8 +111,6 @@ body {
   transform: rotate(-6deg);
 }
 
-/* faixa decorativa logo abaixo do cabeçalho, com uma textura de hachura
-   (linhas diagonais repetidas) lembrando xilogravura/cordel nordestino */
 .faixa_divisoria {
   height: 10px;
   background-color: #3B2A1E;
@@ -128,8 +124,6 @@ body {
   border-top: 2px dashed #D9381E;
   border-bottom: 2px dashed #D9381E;
 }
-
-/* BANNER */
 
 .banner {
   position: relative;
@@ -145,8 +139,6 @@ body {
   overflow: hidden;
 }
 
-/* ilustração grande da antena parabólica "fincada na lama" (símbolo clássico
-   do manifesto Manguebeat), bem apagada ao fundo do banner */
 .antena_ilustracao {
   position: absolute;
   right: -40px;
@@ -157,7 +149,6 @@ body {
   pointer-events: none;
 }
 
-/* selinho tipo carimbo de borracha, levemente torto */
 .selo {
   position: absolute;
   top: 24px;
@@ -200,7 +191,6 @@ body {
   font-size: 80px;
   margin: 0 0 10px;
   line-height: 1;
-  /* leve inclinação pra lembrar um título escrito à mão, recortado e colado */
   transform: rotate(-2deg);
 }
 
@@ -223,7 +213,6 @@ body {
   margin-top: 18px;
 }
 
-/* ao passar o mouse, o botão "afunda" em direção à sombra, como se fosse apertado */
 .banner .banner_conteudo button:hover {
   transform: translate(4px, 4px);
   box-shadow: 4px 4px 0 #D9381E;
@@ -270,8 +259,6 @@ body {
   }
 }
 
-/* "garra de caranguejo" decorativa no canto superior esquerdo dos cards principais:
-   dois tracinhos amarelos em ângulo, feitos só com pseudo-elementos (::before/::after) */
 .historia_card,
 .card_historia,
 .card_login_mangue {
@@ -308,8 +295,6 @@ body {
   transform: rotate(-20deg);
   transform-origin: left center;
 }
-
-/* ULTIMAS HISTORIAS */
 
 .social {
   background-color: #14110F;
@@ -348,7 +333,6 @@ body {
   box-sizing: border-box;
 }
 
-/* cada card com uma leve rotação diferente, pra parecer recorte colado em vez de grade perfeita */
 .historia_card:nth-child(1) {
   transform: rotate(-2deg);
 }
@@ -385,8 +369,6 @@ body {
   margin: 8px 0 0;
   line-height: 1.2;
 }
-
-/* SOBRE MIM */
 
 .sobre {
   background-color: #14110F;
@@ -447,8 +429,6 @@ body {
     width: 100%;
   }
 }
-
-/* PAGINA HISTORIAS */
 
 .pagina_historias {
   background-color: #14110F;
@@ -524,7 +504,6 @@ body {
   flex-direction: column;
 }
 
-/* rotação alternada: cards em posição ímpar pra um lado, pares pro outro */
 .card_historia:nth-child(odd) {
   transform: rotate(-1.5deg);
 }
@@ -600,8 +579,6 @@ body {
   }
 }
 
-/* FOOTER */
-
 .footer {
   background-color: #14110F;
   height: 150px;
@@ -627,8 +604,6 @@ body {
   font-size: 13px;
   color: #8A8A8A;
 }
-
-/* LOGIN */
 
 .login {
   height: var(--tamanho-login);
@@ -714,8 +689,6 @@ body {
   display: none
 }
 
-/* FORMULARIO */
-
 .alerta_erro{
   display: flex;
   justify-content: flex-end;
@@ -769,7 +742,6 @@ input {
   align-items: flex-start;
   justify-content: flex-start;
   padding: 24px;
-  /* leve inclinação, mesmo efeito de "recorte colado" usado no resto do site */
   transform: rotate(-1deg);
 }
 
@@ -898,19 +870,15 @@ input {
   width: 50px;
 }
 
-/* SIMULADOR */
-
 .simulador {
   color: white;
 }
 
 .simulador .container {
   flex-direction: column;
-  overflow: scroll; 
+  overflow: scroll;
   height: var(--tamanho-simulador);
 }
-
-/* ALERTA */
 
 #alerta {
   position: absolute;
