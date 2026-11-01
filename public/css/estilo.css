@@ -588,7 +588,7 @@ input {
 }
 
 .pagina_login .formulario_login_mangue span {
-  font-size: 38px;
+  font-size: 18px;
   font-weight: 400;
   color: #F1E9D8;
 }
@@ -614,14 +614,14 @@ input {
   background-color: #F2B705;
   color: #14110F;
   font-family: 'Permanent Marker', cursive;
-  font-size: 34px;
+  font-size: 22px;
   box-shadow: 6px 6px 0 #D9381E;
 }
 
 .pagina_login .link_cadastro_login {
   margin-top: 14px;
   color: #F2B705;
-  font-size: 38px;
+  font-size: 16px;
 }
 
 .pagina_login .card_logo_login {
