@@ -2,119 +2,86 @@
 <html lang="pt-br">
 
 <head>
-    <link rel="shortcut icon" href="../assets/icon/favicon2.ico" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AquaTech | Tempo Real</title>
 
+    <title>MEU MANGUE 🦀</title>
 
+    <link rel="stylesheet" href="./../css/estilo.css">
     <link rel="stylesheet" href="./../css/dashboards.css">
-    <link rel="stylesheet" href="./../css/estilo.css" />
+    <link rel="icon" href="./../assets/caranguejo_transparente.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&display=swap" rel="stylesheet">
 
     <script src="../js/sessao.js"></script>
-    <script src="../js/alerta.js"></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
 </head>
 
-<body onload="validarSessao(), exibirAquarios(),  atualizacaoPeriodica()">
+<body onload="validarSessao()">
 
-    <div class="janela">
+    <div class="header">
+      <div class="container">
+        <h1 class="titulo"><img class="logo-titulo" src="../assets/caranguejo_transparente.png" alt="logo_caranguejo">MEU <span class="recorte"><span class="cor1">M</span><span class="cor2">A</span><span class="cor3">N</span><span class="cor1">G</span><span class="cor2">U</span><span class="cor3">E</span></span></h1>
+        <ul class="navbar">
+          <li>
+            <a href="../index.html">Home</a>
+          </li>
+          <li>
+            <a href="../historias.html">Histórias</a>
+          </li>
+          <li class="agora">
+            <a href="dashboard.html">Dashboard</a>
+          </li>
+        </ul>
+      </div>
+    </div>
 
-        <div class="header-left dash-header">
+    <div class="faixa_divisoria"></div>
 
-            <h1>AquaTech</h1>
+    <div class="dash_pagina">
+        <div class="container">
+            <div class="dash_grid">
+                <div class="dash_sidebar">
+                    <a href="dashboard.html">Visão geral</a>
+                    <a href="mural.html">Minhas histórias</a>
+                    <a class="ativo" href="cards.html">Minhas favoritas</a>
+                    <a href="edicao-aviso.html">Meu perfil</a>
+                    <div class="dash_sair" onclick="limparSessao()">Sair</div>
+                </div>
 
-            <div class="hello">
-                <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
-            </div>
+                <div class="dash_conteudo">
+                    <h2 class="dash_titulo">Minhas favoritas</h2>
 
-            <div class="btn-nav">
-                <h3>Aquários e Terrários</h3>
-            </div>
+                    <div class="dash_lista" id="lista_favoritas">
+                        <div class="dash_linha favorita">
+                            <div>
+                                <div class="dash_linha_musica">[Nome da música] &mdash; [Artista]</div>
+                                <div class="dash_linha_sub">por [Autor]</div>
+                            </div>
+                            <button class="dash_remover" onclick="removerFavorito(1)">Remover</button>
+                        </div>
 
-            <div class="btn-nav-white">
-                <a href="./dashboard.html">
-                    <h3>Gráficos</h3>
-                </a>
-            </div>
-
-            <div class="btn-nav-white">
-                <a href="./mural.html">
-                    <h3>Mural de Avisos</h3>
-                </a>
-            </div>
-
-            <div class="btn-logout" onclick="limparSessao()">
-                <h3>Sair</h3>
-            </div>
-
-        </div>
-
-        <div class="dash">
-            <div id="alerta">
-            </div>
-            <div class="area-parametros-alerta">
-                <p class="titulo-legenda">
-                    Legenda - Parâmetros para Alertas
-                </p>
-                <div class="parametros-alerta">
-                    <div class="item-regua perigo-frio">
-                        <p>Perigo</p>
-                        <p>&lt;=5°C</p>
-                    </div>
-                    <div class="item-regua alerta-frio">
-                        <p>Alerta</p>
-                        <p>&lt;=10°C</p>
-                    </div>
-                    <div class="item-regua ideal">
-                        <p>Ideal</p>
-                        <p>20°C</p>
-                    </div>
-                    <div class="item-regua alerta-quente">
-                        <p>Alerta</p>
-                        <p>&gt;=22°C</p>
-                    </div>
-                    <div class="item-regua perigo-quente">
-                        <p>Perigo</p>
-                        <p>&gt;=23°C</p>
+                        <div class="dash_linha favorita">
+                            <div>
+                                <div class="dash_linha_musica">[Nome da música] &mdash; [Artista]</div>
+                                <div class="dash_linha_sub">por [Autor]</div>
+                            </div>
+                            <button class="dash_remover" onclick="removerFavorito(2)">Remover</button>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="cards" id="cardAquarios">
-
-            </div>
-
         </div>
-
     </div>
 
 </body>
 
+</html>
+
 <script>
 
-    function exibirAquarios() {
-        JSON.parse(sessionStorage.AQUARIOS).forEach(item => {
-            document.getElementById("cardAquarios").innerHTML += `
-                    <div class="card-aquario">
-                        <div class="title-aquario">
-                            <h1>${item.descricao}</h1>
-                        </div>
-                        <div class="desc-aquario">
-                        <div class="temperatura">
-                            <p id="temp_aquario_${item.id}">-°C</p>
-                        </div>
-                        <div class="cor-alerta" id="card_${item.id}"></div>
-                    </div>
-                    </div>
-                    `
-        });
+    function removerFavorito(idHistoria) {
+        console.log("Remover favorito da história de id:", idHistoria);
     }
 
 </script>
-
-</html>

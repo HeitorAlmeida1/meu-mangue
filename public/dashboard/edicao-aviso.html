@@ -2,129 +2,95 @@
 <html lang="pt-br">
 
 <head>
-    <link rel="shortcut icon" href="../assets/icon/favicon2.ico" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AquaTech | Página Inicial</title>
 
-    
+    <title>MEU MANGUE 🦀</title>
+
+    <link rel="stylesheet" href="./../css/estilo.css">
     <link rel="stylesheet" href="./../css/dashboards.css">
-    <link rel="stylesheet" href="./../css/estilo.css" />
-    <script src="../js/sessao.js"></script>
-
+    <link rel="icon" href="./../assets/caranguejo_transparente.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&display=swap" rel="stylesheet">
+
+    <script src="../js/sessao.js"></script>
 </head>
 
-<body onload="validarSessao(), listarInfosDeUm()" style="background-color: #161618;">
-    <!-- <body onload="validarSessao()"> -->
+<body onload="validarSessao()">
 
-    <div class="janela">
+    <div class="header">
+      <div class="container">
+        <h1 class="titulo"><img class="logo-titulo" src="../assets/caranguejo_transparente.png" alt="logo_caranguejo">MEU <span class="recorte"><span class="cor1">M</span><span class="cor2">A</span><span class="cor3">N</span><span class="cor1">G</span><span class="cor2">U</span><span class="cor3">E</span></span></h1>
+        <ul class="navbar">
+          <li>
+            <a href="../index.html">Home</a>
+          </li>
+          <li>
+            <a href="../historias.html">Histórias</a>
+          </li>
+          <li class="agora">
+            <a href="dashboard.html">Dashboard</a>
+          </li>
+        </ul>
+      </div>
+    </div>
 
+    <div class="faixa_divisoria"></div>
 
-        <div class="header-left">
+    <div class="dash_pagina">
+        <div class="container">
+            <div class="dash_grid">
+                <div class="dash_sidebar">
+                    <a href="dashboard.html">Visão geral</a>
+                    <a href="mural.html">Minhas histórias</a>
+                    <a href="cards.html">Minhas favoritas</a>
+                    <a class="ativo" href="edicao-aviso.html">Meu perfil</a>
+                    <div class="dash_sair" onclick="limparSessao()">Sair</div>
+                </div>
 
-            <h1>AquaTech</h1>
+                <div class="dash_conteudo">
+                    <h2 class="dash_titulo">Meu perfil</h2>
 
-            <div class="hello">
-                <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
-            </div>
+                    <div class="dash_form">
+                        <div class="dash_campo">
+                            <span>Nome</span>
+                            <input id="nome_input" type="text">
+                        </div>
+                        <div class="dash_campo">
+                            <span>E-mail</span>
+                            <input id="email_input" type="text">
+                        </div>
+                        <div class="dash_campo">
+                            <span>Nova senha</span>
+                            <input id="senha_input" type="password" placeholder="Deixe em branco pra manter a atual">
+                        </div>
+                        <button class="dash_botao_salvar" onclick="salvarPerfil()">Salvar alterações</button>
 
-            <div class="btn-nav-white">
-                <a href="cards.html">
-                    <h3>Aquários e Terrários</h3>
-                </a>
-            </div>
-
-            <div class="btn-nav-white">
-                <a href="./dashboard.html">
-                    <h3>Gráficos</h3>
-                </a>
-            </div>
-
-            <div class="btn-nav-white">
-                <a href="./mural.html">
-                    <h3>Mural de Avisos</h3>
-                </a>
-            </div>
-
-            <div class="btn-logout" onclick="limparSessao()">
-                <h3>Sair</h3>
-            </div>
-
-        </div>
-
-        <div class="dash-right">
-
-            <div class="avisos">
-                <div class="container">
-                    <h1>Editar um aviso</h1>
-                    <div class="div-form">
-                        <label>
-                            ID:
-                            <br>
-                            <input id="input_id" maxlength="100" type="text" style="color: rgb(196, 196, 196)" disabled>
-                        </label>
-                        <label>
-                            Autor:
-                            <br>
-                            <input id="input_nome" maxlength="100" type="text" style="color: rgb(196, 196, 196)"
-                                disabled>
-                        </label>
-                        <label>
-                            Título:
-                            <br>
-                            <input id="input_titulo" maxlength="100" type="text" style="color: rgb(196, 196, 196)"
-                                disabled>
-                        </label>
-                        <br>
-                        <label>
-                            Descrição (máximo de 250 caracteres):
-                            <br>
-                            <textarea id="textarea_descricao" maxlength="250" rows="5"></textarea>
-                        </label>
-                        <br>
-                        <button onclick="editar()">Editar</button>
+                        <div class="dash_zona_perigo">
+                            <button class="dash_apagar_conta" onclick="apagarConta()">Apagar minha conta</button>
+                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
+
 </body>
 
 </html>
 
 <script>
-    function listarInfosDeUm() {
-        console.log("Criar função de trazer informações de post escolhido");
+
+    nome_input.value = sessionStorage.NOME_USUARIO;
+    email_input.value = sessionStorage.EMAIL_USUARIO;
+
+    function salvarPerfil() {
+        console.log("Salvar perfil:", nome_input.value, email_input.value);
     }
 
-    function editar() {
-        fetch(`/avisos/editar/${sessionStorage.getItem("ID_POSTAGEM_EDITANDO")}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                descricao: textarea_descricao.value
-            })
-        }).then(function (resposta) {
-
-            if (resposta.ok) {
-                window.alert("Post atualizado com sucesso pelo usuario de email: " + sessionStorage.getItem("EMAIL_USUARIO") + "!");
-                window.location = "/dashboard/mural.html"
-            } else if (resposta.status == 404) {
-                window.alert("Deu 404!");
-            } else {
-                throw ("Houve um erro ao tentar realizar a postagem! Código da resposta: " + resposta.status);
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`);
-        });
+    function apagarConta() {
+        console.log("Apagar conta do usuário de id:", sessionStorage.ID_USUARIO);
     }
 
 </script>
