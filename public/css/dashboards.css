@@ -166,19 +166,9 @@
   box-sizing: border-box;
 }
 
-.dash_linha.favorita {
-  border-left-color: #F2B705;
-}
-
 .dash_linha_musica {
   color: #F1E9D8;
   font-size: 15px;
-}
-
-.dash_linha_sub {
-  font-size: 12px;
-  color: #BDBDBD;
-  margin-top: 2px;
 }
 
 .dash_linha_acoes {
@@ -198,32 +188,6 @@
 .dash_linha_acoes .dash_apagar {
   color: #D9381E;
   border-color: #D9381E;
-}
-
-.dash_remover {
-  background: none;
-  color: #F2B705;
-  border: 1px solid #F2B705;
-  padding: 6px 12px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.dash_atividade {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.dash_atividade_item {
-  border-left: 3px solid #D9381E;
-  padding: 6px 12px;
-  color: #F1E9D8;
-  font-size: 14px;
-}
-
-.dash_atividade_item span {
-  color: #F2B705;
 }
 
 .dash_botao_novo {

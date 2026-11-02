@@ -51,30 +51,8 @@
                 <p class="detalhe_texto">Está música remete a minha infância, principalmente nos fins de semanas que minha mãe estava em casa. Me recordo dela sempre ouvir Ivete enquanto fazia um almoço ou até mesmo limpava a casa, e está música retrata muito bem oque eu sinto sobre esta fase.</p>
 
                 <div class="detalhe_acoes">
-                    <button class="btn_favoritar" id="btn_favoritar" onclick="favoritar()">&hearts; Favoritar</button>
                     <button class="btn_editar" id="btn_editar" onclick="editarHistoria()">Editar</button>
                     <button class="btn_apagar" id="btn_apagar" onclick="apagarHistoria()">Apagar</button>
-                </div>
-            </div>
-
-            <div class="comentarios">
-                <h3>Comentários</h3>
-
-                <div class="form_comentario">
-                    <textarea id="comentario_input" placeholder="Escreva um comentário..."></textarea>
-                    <button onclick="comentar()">Comentar</button>
-                </div>
-
-                <div id="lista_comentarios">
-                    <div class="comentario_item">
-                        <span class="comentario_autor">Edison Aguiar</span>
-                        <p>Está música me deixa alegre!!</p>
-                    </div>
-
-                    <div class="comentario_item">
-                        <span class="comentario_autor">Talita Taba</span>
-                        <p>Isto me lembra do meu filho.</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -95,11 +73,6 @@
 
     var idHistoria = new URLSearchParams(window.location.search).get("id");
 
-    function favoritar() {
-        btn_favoritar.classList.toggle("favoritada");
-        console.log("Favoritar/desfavoritar história de id:", idHistoria);
-    }
-
     function editarHistoria() {
         sessionStorage.ID_HISTORIA_EDITANDO = idHistoria;
         window.location = "nova-historia.html";
@@ -108,9 +81,4 @@
     function apagarHistoria() {
         console.log("Apagar história de id:", idHistoria);
     }
-
-    function comentar() {
-        console.log("Comentário:", comentario_input.value, "na história de id:", idHistoria);
-    }
-
 </script>

@@ -44,7 +44,6 @@
                 <div class="dash_sidebar">
                     <a class="ativo" href="dashboard.html">Visão geral</a>
                     <a href="minhas-historias.html">Minhas histórias</a>
-                    <a href="minhas-favoritas.html">Minhas favoritas</a>
                     <a href="meu-perfil.html">Meu perfil</a>
                     <div class="dash_sair" onclick="limparSessao()">Sair</div>
                 </div>
@@ -56,10 +55,6 @@
                         <div class="dash_metrica">
                             <div class="dash_metrica_label">Histórias lidas</div>
                             <div class="dash_metrica_valor" id="total_lidas">01</div>
-                        </div>
-                        <div class="dash_metrica">
-                            <div class="dash_metrica_label">Favoritas</div>
-                            <div class="dash_metrica_valor" id="total_favoritas">02</div>
                         </div>
                         <div class="dash_metrica">
                             <div class="dash_metrica_label">Total no site</div>
@@ -81,19 +76,8 @@
                         </div>
                         <div class="dash_lista" id="lista_minhas_historias">
                             <div class="dash_linha">
-                                <div>
-                                    <div class="dash_linha_musica">CORINTHIANS &mdash; CHICO</div>
-                                    <div class="dash_linha_sub">02 favoritos &middot; 03 comentários</div>
-                                </div>
+                                <div class="dash_linha_musica">CORINTHIANS &mdash; CHICO</div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="dash_secao">
-                        <h3>Atividade recente</h3>
-                        <div class="dash_atividade" id="lista_atividade">
-                            <div class="dash_atividade_item">Kesiah Cibele comentou na sua história <span>Corinthians</span></div>
-                            <div class="dash_atividade_item">Sua história <span>Corinthians</span> foi favoritada</div>
                         </div>
                     </div>
                 </div>

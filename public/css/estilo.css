@@ -914,76 +914,7 @@ input {
   padding: 10px 16px;
 }
 
-.btn_favoritar.favoritada {
-  background-color: #2E6B3F;
-  border-color: #2E6B3F;
-}
-
 .detalhe_acoes .btn_apagar {
   border-color: #D9381E;
   color: #D9381E;
-}
-
-.comentarios {
-  width: 100%;
-  max-width: 800px;
-  margin-top: 40px;
-}
-
-.comentarios h3 {
-  color: #F2B705;
-  font-family: 'Permanent Marker', cursive;
-  font-size: 28px;
-  margin: 0 0 16px;
-}
-
-.form_comentario {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 24px;
-}
-
-.form_comentario textarea {
-  box-sizing: border-box;
-  width: 100%;
-  min-height: 80px;
-  border: none;
-  background-color: #F1E9D8;
-  color: #14110F;
-  font-family: 'Special Elite', monospace;
-  font-size: 15px;
-  padding: 10px;
-  resize: vertical;
-}
-
-.form_comentario button {
-  align-self: flex-start;
-  cursor: pointer;
-  font-family: 'Permanent Marker', cursive;
-  font-size: 16px;
-  color: #14110F;
-  background-color: #F2B705;
-  border: none;
-  padding: 10px 20px;
-  box-shadow: 4px 4px 0 #D9381E;
-}
-
-.comentario_item {
-  border-top: 1px dashed #D9381E;
-  padding: 14px 0;
-}
-
-.comentario_item .comentario_autor {
-  display: block;
-  color: #F2B705;
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-
-.comentario_item p {
-  margin: 0;
-  color: #F1E9D8;
-  font-size: 16px;
-  line-height: 1.4;
 }
