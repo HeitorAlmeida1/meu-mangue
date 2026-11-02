@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MEU MANGUE 🦀</title>
+
+    <link rel="stylesheet" href="./../css/estilo.css">
+    <link rel="stylesheet" href="./../css/dashboards.css">
+    <link rel="icon" href="./../assets/caranguejo_transparente.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&display=swap" rel="stylesheet">
+
+    <script src="../js/sessao.js"></script>
+</head>
+
+<body onload="validarSessao()">
+
+    <div class="header">
+      <div class="container">
+        <h1 class="titulo"><img class="logo-titulo" src="../assets/caranguejo_transparente.png" alt="logo_caranguejo">MEU <span class="recorte"><span class="cor1">M</span><span class="cor2">A</span><span class="cor3">N</span><span class="cor1">G</span><span class="cor2">U</span><span class="cor3">E</span></span></h1>
+        <ul class="navbar">
+          <li>
+            <a href="../index.html">Home</a>
+          </li>
+          <li>
+            <a href="../historias.html">Histórias</a>
+          </li>
+          <li class="agora">
+            <a href="dashboard.html">Dashboard</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faixa_divisoria"></div>
+
+    <div class="dash_pagina">
+        <div class="container">
+            <div class="dash_grid">
+                <div class="dash_sidebar">
+                    <a href="dashboard.html">Visão geral</a>
+                    <a href="minhas-historias.html">Minhas histórias</a>
+                    <a href="minhas-favoritas.html">Minhas favoritas</a>
+                    <a class="ativo" href="meu-perfil.html">Meu perfil</a>
+                    <div class="dash_sair" onclick="limparSessao()">Sair</div>
+                </div>
+
+                <div class="dash_conteudo">
+                    <h2 class="dash_titulo">Meu perfil</h2>
+
+                    <div class="dash_form">
+                        <div class="dash_campo">
+                            <span>Nome</span>
+                            <input id="nome_input" type="text">
+                        </div>
+                        <div class="dash_campo">
+                            <span>E-mail</span>
+                            <input id="email_input" type="text">
+                        </div>
+                        <div class="dash_campo">
+                            <span>Nova senha</span>
+                            <input id="senha_input" type="password" placeholder="Deixe em branco pra manter a atual">
+                        </div>
+                        <button class="dash_botao_salvar" onclick="salvarPerfil()">Salvar alterações</button>
+
+                        <div class="dash_zona_perigo">
+                            <button class="dash_apagar_conta" onclick="apagarConta()">Apagar minha conta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+    nome_input.value = sessionStorage.NOME_USUARIO;
+    email_input.value = sessionStorage.EMAIL_USUARIO;
+
+    function salvarPerfil() {
+        console.log("Salvar perfil:", nome_input.value, email_input.value);
+    }
+
+    function apagarConta() {
+        console.log("Apagar conta do usuário de id:", sessionStorage.ID_USUARIO);
+    }
+
+</script>

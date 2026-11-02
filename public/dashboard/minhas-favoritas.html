@@ -43,32 +43,30 @@
             <div class="dash_grid">
                 <div class="dash_sidebar">
                     <a href="dashboard.html">Visão geral</a>
-                    <a href="mural.html">Minhas histórias</a>
-                    <a href="cards.html">Minhas favoritas</a>
-                    <a class="ativo" href="edicao-aviso.html">Meu perfil</a>
+                    <a href="minhas-historias.html">Minhas histórias</a>
+                    <a class="ativo" href="minhas-favoritas.html">Minhas favoritas</a>
+                    <a href="meu-perfil.html">Meu perfil</a>
                     <div class="dash_sair" onclick="limparSessao()">Sair</div>
                 </div>
 
                 <div class="dash_conteudo">
-                    <h2 class="dash_titulo">Meu perfil</h2>
+                    <h2 class="dash_titulo">Minhas favoritas</h2>
 
-                    <div class="dash_form">
-                        <div class="dash_campo">
-                            <span>Nome</span>
-                            <input id="nome_input" type="text">
+                    <div class="dash_lista" id="lista_favoritas">
+                        <div class="dash_linha favorita">
+                            <div>
+                                <div class="dash_linha_musica">CORINTHIANS &mdash; CHICO</div>
+                                <div class="dash_linha_sub">por Heitor Torres</div>
+                            </div>
+                            <button class="dash_remover" onclick="removerFavorito(1)">Remover</button>
                         </div>
-                        <div class="dash_campo">
-                            <span>E-mail</span>
-                            <input id="email_input" type="text">
-                        </div>
-                        <div class="dash_campo">
-                            <span>Nova senha</span>
-                            <input id="senha_input" type="password" placeholder="Deixe em branco pra manter a atual">
-                        </div>
-                        <button class="dash_botao_salvar" onclick="salvarPerfil()">Salvar alterações</button>
 
-                        <div class="dash_zona_perigo">
-                            <button class="dash_apagar_conta" onclick="apagarConta()">Apagar minha conta</button>
+                        <div class="dash_linha favorita">
+                            <div>
+                                <div class="dash_linha_musica">CORINTHIANS &mdash; CHICO</div>
+                                <div class="dash_linha_sub">por Heitor Torres</div>
+                            </div>
+                            <button class="dash_remover" onclick="removerFavorito(2)">Remover</button>
                         </div>
                     </div>
                 </div>
@@ -82,15 +80,8 @@
 
 <script>
 
-    nome_input.value = sessionStorage.NOME_USUARIO;
-    email_input.value = sessionStorage.EMAIL_USUARIO;
-
-    function salvarPerfil() {
-        console.log("Salvar perfil:", nome_input.value, email_input.value);
-    }
-
-    function apagarConta() {
-        console.log("Apagar conta do usuário de id:", sessionStorage.ID_USUARIO);
+    function removerFavorito(idHistoria) {
+        console.log("Remover favorito da história de id:", idHistoria);
     }
 
 </script>

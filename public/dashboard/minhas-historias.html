@@ -43,30 +43,39 @@
             <div class="dash_grid">
                 <div class="dash_sidebar">
                     <a href="dashboard.html">Visão geral</a>
-                    <a href="mural.html">Minhas histórias</a>
-                    <a class="ativo" href="cards.html">Minhas favoritas</a>
-                    <a href="edicao-aviso.html">Meu perfil</a>
+                    <a class="ativo" href="minhas-historias.html">Minhas histórias</a>
+                    <a href="minhas-favoritas.html">Minhas favoritas</a>
+                    <a href="meu-perfil.html">Meu perfil</a>
                     <div class="dash_sair" onclick="limparSessao()">Sair</div>
                 </div>
 
                 <div class="dash_conteudo">
-                    <h2 class="dash_titulo">Minhas favoritas</h2>
+                    <div class="dash_cabecalho_secao">
+                        <h2 class="dash_titulo">Minhas histórias</h2>
+                        <button class="dash_botao_novo" onclick="window.location='../nova-historia.html'">+ Nova história</button>
+                    </div>
 
-                    <div class="dash_lista" id="lista_favoritas">
-                        <div class="dash_linha favorita">
+                    <div class="dash_lista" id="lista_historias">
+                        <div class="dash_linha">
                             <div>
-                                <div class="dash_linha_musica">[Nome da música] &mdash; [Artista]</div>
-                                <div class="dash_linha_sub">por [Autor]</div>
+                                <div class="dash_linha_musica">CORINTHIANS &mdash; CHICO</div>
+                                <div class="dash_linha_sub">02 favoritos &middot; 03 comentários</div>
                             </div>
-                            <button class="dash_remover" onclick="removerFavorito(1)">Remover</button>
+                            <div class="dash_linha_acoes">
+                                <button onclick="editar(1)">Editar</button>
+                                <button class="dash_apagar" onclick="apagar(1)">Apagar</button>
+                            </div>
                         </div>
 
-                        <div class="dash_linha favorita">
+                        <div class="dash_linha">
                             <div>
-                                <div class="dash_linha_musica">[Nome da música] &mdash; [Artista]</div>
-                                <div class="dash_linha_sub">por [Autor]</div>
+                                <div class="dash_linha_musica">CORINTHIANS &mdash; CHICO</div>
+                                <div class="dash_linha_sub">03 favoritos &middot; 01 comentários</div>
                             </div>
-                            <button class="dash_remover" onclick="removerFavorito(2)">Remover</button>
+                            <div class="dash_linha_acoes">
+                                <button onclick="editar(2)">Editar</button>
+                                <button class="dash_apagar" onclick="apagar(2)">Apagar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -80,8 +89,15 @@
 
 <script>
 
-    function removerFavorito(idHistoria) {
-        console.log("Remover favorito da história de id:", idHistoria);
+    b_usuario_nome = sessionStorage.NOME_USUARIO;
+
+    function editar(idHistoria) {
+        sessionStorage.ID_HISTORIA_EDITANDO = idHistoria;
+        window.location = "../nova-historia.html";
+    }
+
+    function apagar(idHistoria) {
+        console.log("Apagar história de id:", idHistoria);
     }
 
 </script>

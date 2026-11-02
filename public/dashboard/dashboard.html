@@ -43,9 +43,9 @@
             <div class="dash_grid">
                 <div class="dash_sidebar">
                     <a class="ativo" href="dashboard.html">Visão geral</a>
-                    <a href="mural.html">Minhas histórias</a>
-                    <a href="cards.html">Minhas favoritas</a>
-                    <a href="edicao-aviso.html">Meu perfil</a>
+                    <a href="minhas-historias.html">Minhas histórias</a>
+                    <a href="minhas-favoritas.html">Minhas favoritas</a>
+                    <a href="meu-perfil.html">Meu perfil</a>
                     <div class="dash_sair" onclick="limparSessao()">Sair</div>
                 </div>
 
@@ -55,35 +55,35 @@
                     <div class="dash_metricas">
                         <div class="dash_metrica">
                             <div class="dash_metrica_label">Histórias lidas</div>
-                            <div class="dash_metrica_valor" id="total_lidas">00</div>
+                            <div class="dash_metrica_valor" id="total_lidas">01</div>
                         </div>
                         <div class="dash_metrica">
                             <div class="dash_metrica_label">Favoritas</div>
-                            <div class="dash_metrica_valor" id="total_favoritas">00</div>
+                            <div class="dash_metrica_valor" id="total_favoritas">02</div>
                         </div>
                         <div class="dash_metrica">
                             <div class="dash_metrica_label">Total no site</div>
-                            <div class="dash_metrica_valor" id="total_site">00</div>
+                            <div class="dash_metrica_valor" id="total_site">07</div>
                         </div>
                     </div>
 
                     <div class="dash_destaque">
                         <div class="dash_destaque_tag">Em destaque</div>
-                        <h3 class="dash_destaque_musica">[Nome da música]</h3>
-                        <div class="dash_destaque_info">[Artista] &middot; por [Autor]</div>
+                        <h3 class="dash_destaque_musica">CORINTHIANS</h3>
+                        <div class="dash_destaque_info">CHICO &middot; por Heitor Torres</div>
                         <button onclick="window.location='../historia-detalhe.html?id=1'">Ler história</button>
                     </div>
 
                     <div class="dash_secao">
                         <div class="dash_cabecalho_secao">
                             <h3>Minhas histórias</h3>
-                            <a class="dash_ver_todas" href="mural.html">ver todas &rarr;</a>
+                            <a class="dash_ver_todas" href="minhas-historias.html">ver todas &rarr;</a>
                         </div>
                         <div class="dash_lista" id="lista_minhas_historias">
                             <div class="dash_linha">
                                 <div>
-                                    <div class="dash_linha_musica">[Nome da música] &mdash; [Artista]</div>
-                                    <div class="dash_linha_sub">[N] favoritos &middot; [N] comentários</div>
+                                    <div class="dash_linha_musica">CORINTHIANS &mdash; CHICO</div>
+                                    <div class="dash_linha_sub">02 favoritos &middot; 03 comentários</div>
                                 </div>
                             </div>
                         </div>
@@ -92,8 +92,8 @@
                     <div class="dash_secao">
                         <h3>Atividade recente</h3>
                         <div class="dash_atividade" id="lista_atividade">
-                            <div class="dash_atividade_item">[Fulano] comentou na sua história <span>[Nome da música]</span></div>
-                            <div class="dash_atividade_item">Sua história <span>[Nome da música]</span> foi favoritada</div>
+                            <div class="dash_atividade_item">Kesiah Cibele comentou na sua história <span>Corinthians</span></div>
+                            <div class="dash_atividade_item">Sua história <span>Corinthians</span> foi favoritada</div>
                         </div>
                     </div>
                 </div>
