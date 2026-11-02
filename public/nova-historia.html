@@ -106,16 +106,56 @@
     }
 
     function salvarHistoria() {
+
         var historia = {
-            nomeMusica: nome_musica_input.value,
-            artista: artista_input.value,
-            dataMusica: data_musica_input.value,
-            fkFaseVida: fase_vida_input.value,
-            trecho: trecho_input.value,
-            textoCompleto: texto_completo_input.value
+            nomeMusicaServer: nome_musica_input.value,
+            artistaServer: artista_input.value,
+            dataMusicaServer: data_musica_input.value,
+            fkFaseVidaServer: fase_vida_input.value,
+            trechoServer: trecho_input.value,
+            textoCompletoServer: texto_completo_input.value,
+            fkUsuarioServer: sessionStorage.ID_USUARIO
         };
 
-        console.log("Dados prontos pra enviar pro backend:", historia);
-    }
+        if (historia.nomeMusicaServer == "" || historia.artistaServer == "" || historia.dataMusicaServer == "" || historia.fkFaseVidaServer == "" || historia.trechoServer == "" || historia.textoCompletoServer == "" || historia.fkUsuarioServer == "") {
+            alert('Mensagem de erro para todos os campos em branco');
+            return false;
+        }
 
+        fetch("/historias/salvarHistoria", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify( historia )
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                    setTimeout(function () {
+                        window.location = "./historias.html";
+                    }, 1000); // apenas para exibir o loading
+
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar cadastrar esta história");
+
+                resposta.text().then(texto => {
+                    alert(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
 </script>
