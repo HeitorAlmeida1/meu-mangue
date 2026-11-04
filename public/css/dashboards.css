@@ -1,13 +1,12 @@
 .dash_pagina {
-  background-color: #14110F;
-  padding: 30px 0 60px;
-  min-height: calc(100vh - var(--tamanho-header) - var(--tamanho-footer));
+  background-color: #F1E9D8;
+  padding: 44px 0 60px;
 }
 
 .dash_grid {
   width: 100%;
   display: flex;
-  gap: 24px;
+  gap: 40px;
   align-items: flex-start;
 }
 
@@ -16,49 +15,55 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
+  border-left: 1px solid #DCD0B8;
 }
 
 .dash_sidebar a {
   text-decoration: none;
-  color: #BDBDBD;
-  background-color: #3B2A1E;
-  padding: 10px 14px;
-  font-size: 14px;
+  color: #6B5F50;
+  border-left: 3px solid transparent;
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 .dash_sidebar a.ativo {
-  background-color: #2E6B3F;
-  color: #F1E9D8;
+  background-color: #FFFFFF;
+  border-left: 3px solid #E2582A;
+  color: #1C140D;
 }
 
 .dash_sair {
   color: #D9381E;
-  background-color: #14110F;
-  border: 1px solid #D9381E;
-  padding: 9px 14px;
-  font-size: 14px;
-  cursor: pointer;
+  border-top: 1px solid #DCD0B8;
   margin-top: 10px;
+  padding: 14px 16px 0;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
 .dash_conteudo {
   flex: 1;
-  min-width: 0;
 }
 
-.dash_saudacao {
-  font-family: 'Permanent Marker', cursive;
-  color: #F2B705;
-  font-size: 28px;
-  margin: 0 0 20px;
-}
-
+.dash_saudacao,
 .dash_titulo {
-  font-family: 'Permanent Marker', cursive;
-  color: #F2B705;
-  font-size: 28px;
-  margin: 0 0 20px;
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
+  color: #1C140D;
+  font-size: 36px;
+  text-transform: uppercase;
+  margin: 0 0 24px;
+}
+
+.dash_saudacao span {
+  color: #E2582A;
 }
 
 .dash_cabecalho_secao {
@@ -70,67 +75,90 @@
 
 .dash_metricas {
   display: flex;
-  gap: 12px;
-  margin-bottom: 28px;
+  gap: 14px;
+  margin-bottom: 30px;
 }
 
 .dash_metrica {
   flex: 1;
-  background-color: #3B2A1E;
-  padding: 14px 16px;
-  box-sizing: border-box;
+  background-color: #FFFFFF;
+  border: 1px solid #E3D9C4;
+  padding: 18px 20px;
+}
+
+.dash_metrica_destaque {
+  background-color: #E2582A;
+  border-color: #E2582A;
+}
+
+.dash_metrica_destaque .dash_metrica_label {
+  color: #FBEFE4;
+}
+
+.dash_metrica_destaque .dash_metrica_valor {
+  color: #FFFFFF;
 }
 
 .dash_metrica_label {
-  font-size: 12px;
-  color: #BDBDBD;
-  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #6B5F50;
+  margin-bottom: 8px;
 }
 
 .dash_metrica_valor {
-  font-size: 26px;
-  color: #F1E9D8;
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
+  font-size: 34px;
+  color: #1C140D;
 }
 
 .dash_destaque {
   background-color: #3B2A1E;
-  border: 2px solid #D9381E;
-  padding: 20px;
-  margin-bottom: 28px;
+  padding: 26px 28px;
+  margin-bottom: 32px;
 }
 
 .dash_destaque_tag {
-  font-size: 12px;
-  color: #F2B705;
+  font-size: 11px;
+  font-weight: 700;
+  color: #E2582A;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .dash_destaque_musica {
-  font-family: 'Permanent Marker', cursive;
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
   color: #FFFFFF;
-  font-size: 24px;
+  font-size: 28px;
+  text-transform: uppercase;
   margin: 0 0 4px;
 }
 
 .dash_destaque_info {
   font-size: 14px;
   color: #BDBDBD;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .dash_destaque button {
-  background-color: #F2B705;
-  color: #14110F;
+  background-color: #E2582A;
+  color: #FFFFFF;
   border: none;
-  padding: 10px 18px;
-  font-family: 'Permanent Marker', cursive;
-  font-size: 16px;
+  padding: 12px 22px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
 .dash_destaque button:hover {
-  background-color: #D9A204;
+  background-color: #C24A22;
 }
 
 .dash_secao {
@@ -138,36 +166,42 @@
 }
 
 .dash_secao h3 {
-  font-family: 'Permanent Marker', cursive;
-  color: #F2B705;
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
+  color: #1C140D;
   font-size: 20px;
+  text-transform: uppercase;
   margin: 0;
 }
 
 .dash_secao a.dash_ver_todas {
-  font-size: 13px;
-  color: #F2B705;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #E2582A;
   text-decoration: none;
 }
 
 .dash_lista {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px;
 }
 
 .dash_linha {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #3B2A1E;
-  border-left: 3px solid #2E6B3F;
-  padding: 12px 16px;
-  box-sizing: border-box;
+  background-color: #FFFFFF;
+  border: 1px solid #E3D9C4;
+  border-left: 3px solid #E2582A;
+  padding: 14px 18px;
 }
 
 .dash_linha_musica {
-  color: #F1E9D8;
+  color: #1C140D;
+  font-weight: 600;
   font-size: 15px;
 }
 
@@ -177,12 +211,20 @@
 }
 
 .dash_linha_acoes button {
-  background-color: #14110F;
-  color: #F1E9D8;
-  border: 1px solid #F1E9D8;
-  padding: 6px 12px;
-  font-size: 12px;
+  background-color: transparent;
+  color: #1C140D;
+  border: 1px solid #1C140D;
+  padding: 8px 14px;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   cursor: pointer;
+}
+
+.dash_linha_acoes button:hover {
+  background-color: #1C140D;
+  color: #FFFFFF;
 }
 
 .dash_linha_acoes .dash_apagar {
@@ -190,92 +232,89 @@
   border-color: #D9381E;
 }
 
+.dash_linha_acoes .dash_apagar:hover {
+  background-color: #D9381E;
+  color: #FFFFFF;
+}
+
 .dash_botao_novo {
-  background-color: #F2B705;
-  color: #14110F;
+  background-color: #E2582A;
+  color: #FFFFFF;
   border: none;
-  padding: 10px 18px;
-  font-family: 'Permanent Marker', cursive;
-  font-size: 16px;
+  padding: 12px 20px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
 .dash_botao_novo:hover {
-  background-color: #D9A204;
+  background-color: #C24A22;
 }
 
 .dash_form {
-  max-width: 380px;
+  max-width: 420px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 .dash_campo span {
   display: block;
-  font-size: 14px;
-  margin-bottom: 6px;
-  color: #F1E9D8;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+  color: #6B5F50;
 }
 
 .dash_campo input {
   width: 100%;
-  box-sizing: border-box;
-  border: none;
-  background-color: #F1E9D8;
-  color: #14110F;
-  font-family: 'Special Elite', monospace;
+  border: 1px solid #DCD0B8;
+  background-color: #FFFFFF;
+  color: #1C140D;
+  font-family: 'Barlow', sans-serif;
   font-size: 15px;
-  padding: 10px;
+  padding: 12px 14px;
 }
 
 .dash_form .dash_botao_salvar {
-  background-color: #F2B705;
-  color: #14110F;
+  background-color: #E2582A;
+  color: #FFFFFF;
   border: none;
-  padding: 10px;
-  font-family: 'Permanent Marker', cursive;
-  font-size: 18px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   cursor: pointer;
+  padding: 14px 28px;
 }
 
 .dash_form .dash_botao_salvar:hover {
-  background-color: #D9A204;
+  background-color: #C24A22;
 }
 
 .dash_zona_perigo {
   border-top: 1px dashed #D9381E;
-  margin-top: 10px;
-  padding-top: 16px;
+  margin-top: 8px;
+  padding-top: 18px;
 }
 
 .dash_apagar_conta {
   background: none;
   color: #D9381E;
   border: 1px solid #D9381E;
-  padding: 8px 14px;
-  font-size: 13px;
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
-@media (max-width: 800px) {
-  .dash_grid {
-    flex-direction: column;
-  }
-
-  .dash_sidebar {
-    width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .dash_metricas {
-    flex-direction: column;
-  }
-
-  .dash_linha {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
+.dash_apagar_conta:hover {
+  background-color: #D9381E;
+  color: #FFFFFF;
 }

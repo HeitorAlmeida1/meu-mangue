@@ -6,21 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>MEU MANGUE 🦀</title>
+    <title>MEU MANGUE</title>
 
     <script src="./js/sessao.js"></script>
 
     <link rel="stylesheet" href="./css/estilo.css">
-    <link rel="icon" href="./assets/caranguejo_transparente.png">
+    <link rel="icon" href="./assets/caranguejo_sem_moldura.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
     <div class="header">
       <div class="container">
-        <h1 class="titulo"><img class="logo-titulo" src="assets/caranguejo_transparente.png" alt="logo_caranguejo">MEU <span class="recorte"><span>M</span><span>A</span><span>N</span><span>G</span><span>U</span><span>E</span></span></h1>
+        <h1 class="titulo"><img class="logo-titulo" src="assets/caranguejo.svg" alt="logo caranguejo">MEU <span class="recorte">MANGUE</span></h1>
         <ul class="navbar">
           <li>
             <a href="index.html">Home</a>
@@ -42,36 +41,51 @@
 
     <div class="pagina_formulario">
         <div class="container">
-            <div class="card_formulario">
+            <div class="formulario_passos">
+                <span class="eyebrow">// Publicar</span>
                 <h2 id="titulo_formulario">Nova história</h2>
+                <p>Escolha a música, diga em que fase da vida ela entrou e conte o que ela representa.</p>
+                <ol>
+                    <li><span>01</span> A música</li>
+                    <li><span>02</span> A fase da vida</li>
+                    <li><span>03</span> A história</li>
+                </ol>
+            </div>
 
-                <div class="campo">
-                    <span>Nome da música</span>
-                    <input id="nome_musica_input" type="text" placeholder="Nome da música">
+            <div class="card_formulario">
+                <h2>Nova história</h2>
+
+                <div class="campos_duas_colunas">
+                    <div class="campo">
+                        <span>Nome da música</span>
+                        <input id="nome_musica_input" type="text" placeholder="Nome da música">
+                    </div>
+
+                    <div class="campo">
+                        <span>Artista</span>
+                        <input id="artista_input" type="text" placeholder="Nome do artista">
+                    </div>
+                </div>
+
+                <div class="campos_duas_colunas">
+                    <div class="campo">
+                        <span>Data da música</span>
+                        <input id="data_musica_input" type="date">
+                    </div>
+
+                    <div class="campo">
+                        <span>Fase da vida</span>
+                        <select id="fase_vida_input">
+                            <option value="">Selecione uma fase</option>
+                            <option value="1">Infância</option>
+                            <option value="2">Adolescência</option>
+                            <option value="3">Hoje</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="campo">
-                    <span>Artista</span>
-                    <input id="artista_input" type="text" placeholder="Nome do artista">
-                </div>
-
-                <div class="campo">
-                    <span>Data da música</span>
-                    <input id="data_musica_input" type="date">
-                </div>
-
-                <div class="campo">
-                    <span>Fase da vida</span>
-                    <select id="fase_vida_input">
-                        <option value="">Selecione uma fase</option>
-                        <option value="1">Infância</option>
-                        <option value="2">Adolescência</option>
-                        <option value="3">Hoje</option>
-                    </select>
-                </div>
-
-                <div class="campo">
-                    <span>Trecho (resumo curto, aparece nos cards)</span>
+                    <span>Trecho (aparece nos cards)</span>
                     <textarea id="trecho_input" maxlength="140" placeholder="Um resumo curto da história..."></textarea>
                 </div>
 
@@ -86,10 +100,21 @@
     </div>
 
     <div class="footer">
-        <div class="container">
-            <h4>Projeto acadêmico sem fins lucrativos. 2026/2</h4>
-            <p class="footer_credito">Inspirado no Manguebeat de Chico Science &amp; Nação Zumbi.</p>
+      <div class="container">
+        <div class="footer_logo">
+          <img class="logo-titulo" src="assets/caranguejo.svg" alt="logo caranguejo">
+          MEU <span class="recorte">MANGUE</span>
         </div>
+        <div class="footer_contatos">
+          <a href="mailto:seuemail@email.com">seuemail@email.com</a>
+          <a href="https://instagram.com/seuusuario" target="_blank">Instagram</a>
+          <a href="https://github.com/seuusuario" target="_blank">GitHub</a>
+        </div>
+        <div class="footer_texto">
+          <h4>Projeto acadêmico sem fins lucrativos &middot; 2026/2</h4>
+          <p class="footer_credito">Inspirado no Manguebeat de Chico Science &amp; Nação Zumbi.</p>
+        </div>
+      </div>
     </div>
 
 </body>

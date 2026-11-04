@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="800" height="800"><defs>
+<filter id="corte" x="-5%" y="-5%" width="110%" height="110%">
+ <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="r"/>
+ <feDisplacementMap in="SourceGraphic" in2="r" scale="5"/>
+</filter>
+<filter id="grao" x="0" y="0" width="100%" height="100%">
+ <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/>
+ <feColorMatrix values="0 0 0 0 0.98  0 0 0 0 0.96  0 0 0 0 0.93  0 0 0 -16 3.6"/>
+</filter>
+</defs>
+<g filter="url(#corte)"><rect x="-10" y="-10" width="420" height="420" fill="#B8754A"/>
+<circle cx="200" cy="220" r="150" fill="none" stroke="#2A1D14" stroke-width="4" stroke-dasharray="18 10"/><circle cx="200" cy="220" r="175" fill="none" stroke="#2A1D14" stroke-width="4" stroke-dasharray="18 10"/>
+<circle cx="200" cy="220" r="128" fill="#E2582A"/>
+<circle cx="200" cy="220" r="128" fill="none" stroke="#2A1D14" stroke-width="6"/>
+<path d="M176 128 L112 44" stroke="#2A1D14" stroke-width="12" stroke-linecap="round"/>
+<path d="M224 128 L288 44" stroke="#2A1D14" stroke-width="12" stroke-linecap="round"/>
+<circle cx="108" cy="38" r="15" fill="#2A1D14"/><circle cx="292" cy="38" r="15" fill="#2A1D14"/>
+<circle cx="104" cy="34" r="5" fill="#FAF6EE"/><circle cx="288" cy="34" r="5" fill="#FAF6EE"/>
+<path d="M108 156 V300 C108 322 150 340 200 340 S292 322 292 300 V156 Z" fill="#2A1D14"/>
+<ellipse cx="200" cy="156" rx="92" ry="30" fill="#FAF6EE" stroke="#2A1D14" stroke-width="9"/>
+<path d="M134 150 C160 160 240 160 266 150" stroke="#2A1D14" stroke-width="3" fill="none"/>
+<path d="M108 196 C140 208 260 208 292 196 M108 300 C140 312 260 312 292 300" stroke="#FAF6EE" stroke-width="4" fill="none"/>
+<path d="M112 204 L150 306 L200 208 L250 306 L288 204" stroke="#FAF6EE" stroke-width="6" fill="none" stroke-linejoin="round"/>
+<path d="M126 236 l8 -3 M140 274 l8 -3 M176 252 l-8 -3 M224 252 l8 -3 M262 274 l-8 -3 M272 236 l-8 -3" stroke="#FAF6EE" stroke-width="3" stroke-linecap="round"/>
+<rect x="14" y="356" width="372" height="40" fill="#2A1D14"/>
+<path d="M30 372 h14 M60 372 h14 M90 372 h14 M120 372 h14 M150 372 h14 M180 372 h14 M210 372 h14 M240 372 h14 M270 372 h14 M300 372 h14 M330 372 h14 M360 372 h14" stroke="#B8754A" stroke-width="4" stroke-linecap="round"/>
+</g>
+<rect width="400" height="400" filter="url(#grao)"/></svg>

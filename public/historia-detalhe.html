@@ -6,21 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>MEU MANGUE 🦀</title>
+    <title>MEU MANGUE</title>
 
     <script src="./js/sessao.js"></script>
 
     <link rel="stylesheet" href="./css/estilo.css">
-    <link rel="icon" href="./assets/caranguejo_transparente.png">
+    <link rel="icon" href="./assets/caranguejo_sem_moldura.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
     <div class="header">
       <div class="container">
-        <h1 class="titulo"><img class="logo-titulo" src="assets/caranguejo_transparente.png" alt="logo_caranguejo">MEU <span class="recorte"><span>M</span><span>A</span><span>N</span><span>G</span><span>U</span><span>E</span></span></h1>
+        <h1 class="titulo"><img class="logo-titulo" src="assets/caranguejo.svg" alt="logo caranguejo">MEU <span class="recorte">MANGUE</span></h1>
         <ul class="navbar">
           <li>
             <a href="index.html">Home</a>
@@ -42,13 +41,31 @@
 
     <div class="pagina_detalhe">
         <div class="container">
+            <div class="detalhe_imagem">
+                <img src="assets/caranguejo.png" alt="Ilustração da história">
+            </div>
             <div class="detalhe_card">
+                <span class="eyebrow">// História 01</span>
                 <span class="tag_fase">Infância</span>
                 <h1 class="detalhe_musica">Céu da boca</h1>
                 <span class="detalhe_artista">Ivete Sangalo &middot; 2004</span>
-                <span class="detalhe_autor">Por Heitor</span>
 
                 <p class="detalhe_texto">Está música remete a minha infância, principalmente nos fins de semanas que minha mãe estava em casa. Me recordo dela sempre ouvir Ivete enquanto fazia um almoço ou até mesmo limpava a casa, e está música retrata muito bem oque eu sinto sobre esta fase.</p>
+
+                <div class="detalhe_meta">
+                    <div>
+                        <span>Fase</span>
+                        <strong>Infância</strong>
+                    </div>
+                    <div>
+                        <span>Ano</span>
+                        <strong>2004</strong>
+                    </div>
+                    <div>
+                        <span>Autor</span>
+                        <strong>Heitor Torres</strong>
+                    </div>
+                </div>
 
                 <div class="detalhe_acoes">
                     <button class="btn_editar" id="btn_editar" onclick="editarHistoria()">Editar</button>
@@ -59,10 +76,21 @@
     </div>
 
     <div class="footer">
-        <div class="container">
-            <h4>Projeto acadêmico sem fins lucrativos. 2026/2</h4>
-            <p class="footer_credito">Inspirado no Manguebeat de Chico Science &amp; Nação Zumbi.</p>
+      <div class="container">
+        <div class="footer_logo">
+          <img class="logo-titulo" src="assets/caranguejo.svg" alt="logo caranguejo">
+          MEU <span class="recorte">MANGUE</span>
         </div>
+        <div class="footer_contatos">
+          <a href="mailto:seuemail@email.com">seuemail@email.com</a>
+          <a href="https://instagram.com/seuusuario" target="_blank">Instagram</a>
+          <a href="https://github.com/seuusuario" target="_blank">GitHub</a>
+        </div>
+        <div class="footer_texto">
+          <h4>Projeto acadêmico sem fins lucrativos &middot; 2026/2</h4>
+          <p class="footer_credito">Inspirado no Manguebeat de Chico Science &amp; Nação Zumbi.</p>
+        </div>
+      </div>
     </div>
 
 </body>
