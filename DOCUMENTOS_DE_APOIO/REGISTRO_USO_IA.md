@@ -281,16 +281,205 @@ foram feitas pelo autor a partir de perguntas/explicações guiadas.
 `nova-historia.html → POST /historias/salvarHistoria → historiaController →
 historiaModel → MySQL`.
 
+## 2026-11-05
+
+### Prompt 29
+
+> ola, de uma olhada em como esta o projeto atualmente, fiz muitas mudanças principalmente no visual de uma olhada e continue me ajudando a como ligar todas as telas com elas mesmas e o banco de dados, no banco de dados eu ja fiz um der deixarei em anexo como ficou
+
+(seguido de imagem do diagrama ER atualizado e, após pergunta da IA sobre a
+localização do código, do caminho `C:\meu-mangue\`)
+
+**Resposta da IA (resumo):** sessão retomada em ambiente/pasta diferente da
+anterior. IA localizou o projeto real em `C:\meu-mangue` (a pasta inicialmente
+aberta só tinha entregáveis: pptx, xlsx, docx, der.png, script SQL). Revisão de
+sincronização: confirmado que tudo construído nas sessões anteriores permanece
+intacto (`historiaModel.js`, `historiaController.js`, `src/routes/historias.js`,
+registro em `app.js`, e o `fetch` em `nova-historia.html`), com o visual da tela
+redesenhado por cima sem alterar a lógica. Confirmado que o schema real do banco
+(`meu_mangue`, batendo com o diagrama ER anexado) evoluiu desde a última revisão
+(colunas `NOT NULL`, `fase_vida.descricao`, dados de teste e consultas `JOIN`
+prontas). Reconfirmado o problema pendente identificado na sessão anterior: o
+`usuarioModel.js` ainda busca uma coluna `fk_empresa` inexistente na tabela
+`usuario` atual, o que deve estar quebrando o login. Também observado que
+`src/database/script-tabelas.sql` ainda reflete o schema antigo "aquatech" e não
+o schema real em uso.
+
+### Prompt 30
+
+> primeiro pode me passar tudo que eu tenho que arrumar ou excluir para deixar tudo 100% ai depois nos vamos por etapas de mudanças ok ? me liste tudo que eu preciso fazer
+
+**Resposta da IA (resumo):** auditoria completa do projeto (todas as telas em
+`public/`, todos os models/controllers/rotas em `src/`), sem alterar nada, gerando
+uma lista única de pendências organizada por prioridade (ver checklist abaixo).
+
+### Prompt 31
+
+> sim, salva a lista e começa pelo login
+
+**Resposta da IA (resumo):** lista salva neste arquivo como checklist. Início da
+correção guiada do login (prioridade mais alta da lista).
+
+## Checklist de pendências (gerado em 2026-11-05)
+
+### 🔴 Prioridade alta (impede o site de funcionar)
+
+- [ ] `src/models/usuarioModel.js` (`autenticar`) busca coluna `fk_empresa`,
+      inexistente na tabela `usuario` atual — login quebrado.
+- [ ] `src/controllers/usuarioController.js` (`autenticar`) chama
+      `aquarioModel.buscarAquariosPorEmpresa(...)` e devolve `aquarios` no JSON —
+      não se aplica ao domínio atual.
+- [ ] `public/js/sessao.js` (`validarSessao`) assume que existe um elemento
+      `id="b_usuario"` em toda página que a chama — só existe em `dashboard.html`;
+      vai travar em `minhas-historias.html` e `meu-perfil.html` quando logado.
+
+### 🟡 Prioridade média (telas visuais sem dados reais do banco)
+
+- [ ] `historias.html`: lista de histórias é fixa no HTML — falta listar do banco
+      (model/controller/rota de listagem + fetch) e fazer os filtros funcionarem.
+- [ ] `historia-detalhe.html`: ignora o `?id=` da URL, sempre mostra o mesmo
+      exemplo — falta buscar por id; `apagarHistoria()` só faz `console.log`,
+      falta rota de deletar.
+- [ ] Edição de história incompleta: `nova-historia.html` não carrega os dados
+      existentes no formulário nem faz `PUT`/atualização — sempre cria um registro
+      novo; falta model/controller/rota de atualizar.
+- [ ] `dashboard.html`: métricas, destaque e lista "Minhas histórias" são fixos no
+      HTML — precisam vir de consultas reais (já há rascunhos no `meu-mangue.sql`).
+- [ ] `minhas-historias.html` (dashboard): lista fixa (2 exemplos fake); `apagar()`
+      só faz `console.log` — falta listagem real por usuário e apagar de verdade.
+- [ ] `meu-perfil.html`: `salvarPerfil()` e `apagarConta()` só fazem `console.log`
+      — não existe nenhuma função de atualizar/apagar usuário no model/controller
+      ainda; precisa ser criada do zero.
+
+### 🟢 Prioridade baixa (organização/limpeza, não quebra nada)
+
+- [ ] Código morto do template "aquatech": `aquarioController.js`,
+      `avisoController.js`, `empresaController.js`, `medidaController.js` e
+      models/rotas equivalentes, mais as linhas correspondentes em `app.js`.
+- [ ] `src/database/script-tabelas.sql` desatualizado (ainda mostra schema
+      "aquatech"); atualizar para refletir o schema real ou remover.
+- [ ] `src/routes/index.js` usa `res.render("index")` sem view engine configurada
+      — código morto (o `express.static` já responde `GET /` antes dessa rota).
+- [ ] Sobras de copy-paste: `console.log("ESTOU NO THEN DO entrar()!")` em
+      `login.html` e `nova-historia.html`; comentário desatualizado em
+      `historiaController.js` mencionando `usuarioModel.js`; `sessionStorage.AQUARIOS`
+      salvo sem necessidade em `login.html`.
+- [ ] `package.json` lista `"path"` como dependência — é módulo nativo do Node,
+      não precisa ser instalado via npm.
+
+### Prompts 32-34 (ciclo de correção do login)
+
+> ok vou vamos da um passo atras pera ai tem como eu mudar esta conversa para o repositorio que voce esta vinculado seja este com o projeto e os codigos ??
+
+**Resposta da IA (resumo):** sessão movida, via ferramenta de troca de diretório,
+para `C:\meu-mangue` (antes só tinha acesso como pasta extra) — projeto agora
+vinculado como diretório principal da sessão.
+
+> ok agora olhe de novo ele e me fale as prioridades por favor
+
+**Resposta da IA (resumo):** reapresentação do checklist já salvo (nada havia
+mudado nos arquivos, só a vinculação da sessão).
+
+> pode repetir o guia
+
+**Resposta da IA (resumo):** repetição do guia dos 3 ajustes do login (query do
+`usuarioModel.js`, simplificação do `usuarioController.js`, limpeza do
+`login.html`).
+
+> ok consegui o item 1 e 3 acho confira se esta ok e me explique melhor o item 2
+
+**Resposta da IA (resumo):** itens 1 e 3 validados como corretos. Explicação
+aprofundada do item 2 — o papel de `resultadoAutenticar.length` nas 3 ramificações
+(`== 1`, `== 0`, caso contrário), por que a chamada a `aquarioModel` não fazia mais
+sentido (dependia de `empresaId`, já removido da query), e o que deveria substituí-la
+(um único `res.json({ id, email, nome })`, sem `senha`). Checklist de 3 ações
+passado ao autor, sem reescrever o arquivo.
+
+> corrigi, dá uma olhada de novo
+
+**Resposta da IA (resumo):** `usuarioController.js` validado como correto —
+bloco do `aquarioModel` substituído por `res.json` direto, `require` não utilizado
+removido, resto da lógica intacta. Login considerado pronto para teste.
+
+> nao esta redirecionando
+
+**Resposta da IA (resumo):** diagnóstico ativo pela IA (não apenas orientação):
+rodado um script Node pontual, usando as próprias credenciais do `.env.dev`, para
+testar a conexão/consulta ao banco diretamente. Resultado: erro de permissão
+(`SELECT command denied to user 'insert_mangue'@'localhost'`) — causa raiz não era
+mais código, e sim o usuário do MySQL usado pela aplicação ter só permissão de
+`INSERT`.
+
+> o meu banco é so de insert o que esta la
+
+**Resposta da IA (resumo):** explicado o impacto: toda função de leitura (login e,
+no futuro, listagens) depende de `SELECT`; editar/apagar vão depender de
+`UPDATE`/`DELETE`. Autor confirmou que a restrição foi um erro de configuração (não
+proposital), e foi orientado a conceder as permissões faltantes no MySQL (fora do
+código da aplicação, via usuário administrador).
+
+> nao foi ainda mudei as permissoes do usuario reinicie todas as aplicaçoes e nao foi
+
+**Resposta da IA (resumo):** reexecutado o mesmo script de diagnóstico — `SELECT`
+já funcionando, confirmando que a permissão foi corrigida com sucesso. Como o autor
+ainda via falha, foi passado um checklist de diagnóstico (URL certa com servidor
+rodando, aba Network do navegador, terminal do `npm run dev`).
+
+> ok estava na url errada esta indo para a dash agr, vamos continuar as ligaçoes, o cadastro esta ok ?
+
+**Resposta da IA (resumo):** login confirmado funcional. Revisão do fluxo de
+cadastro (`cadastro.html`, rota, controller, model) — estrutura correta e deveria
+funcionar (usuário do banco já tinha `INSERT` desde o início). Identificados 2
+achados novos, fora do checklist original: (1) senha e confirmação de senha nunca
+são comparadas; (2) em caso de falha (ex: e-mail duplicado, coluna `UNIQUE`), o
+usuário não vê nenhuma mensagem de erro.
+
+## Item novo: polimento de cadastro/login (login funcional, ajustes em cadastro.html)
+
+> ok o cadastro esta tudo ok, vamos fazer essas mudanças que citou ? [...] seria legal colocar um filtro com for para so receber senhas fortes [...] na parte de mensagem que aparece erro ou sucesso precisamos mudar o css tbm
+
+**Resposta da IA (resumo):** 4 melhorias guiadas passo a passo em `cadastro.html`
+(e `estilo.css`), todas implementadas pelo autor com revisão da IA a cada rodada:
+1. Validação de senha == confirmação de senha (5ª condição no `if` de campos).
+2. Exibição do erro real do servidor na falha do cadastro (`resposta.text().then(...)`
+   substituindo um `throw` de texto fixo).
+3. Validação de senha forte (mínimo 8 caracteres, 1 número, 1 maiúscula) usando um
+   `for` percorrendo a string caractere por caractere e comparação por intervalo
+   (`caractere >= '0' && caractere <= '9'`, etc.) — técnica escolhida para não
+   depender de regex.
+4. Diferenciação visual via CSS: nova classe `.card_erro.sucesso` (verde,
+   `#2E6B3F`) ativada com `classList.add`/`remove` conforme sucesso ou erro,
+   mantendo o vermelho como padrão de erro.
+
+Idas e vindas no processo: esqueceu de "fechar" o estado de carregamento
+(`finalizarAguardar()`) no bloco de senha fraca na primeira tentativa; inverteu
+`add`/`remove` no bloco de sucesso numa rodada. Ambos corrigidos pelo autor após
+explicação da IA, sem a IA escrever o código.
+
+## Item: correção do `validarSessao()` (checklist 🔴, item 3)
+
+> sim, vamos corrigir o validarSessao
+
+**Resposta da IA (resumo):** explicado o bug (`getElementById` retorna `null` em
+páginas sem `#b_usuario`, e a linha seguinte quebra ao tentar `null.innerHTML`).
+Apresentadas 2 opções — adicionar o elemento em todas as páginas, ou tornar a
+função defensiva checando `if (b_usuario)` antes de usá-lo — com recomendação pela
+segunda. Autor escolheu a opção B.
+
+> corrigi, dá uma olhada de novo *(duas rodadas)*
+
+**Resposta da IA (resumo):** primeira tentativa criou um bloco `if (b_usuario)`
+novo e redundante, rodando sempre (inclusive deslogado), sem proteger a linha
+original que de fato quebrava. Explicado por que a correção precisava **substituir**
+a linha existente dentro do `if (email != null && nome != null)`, não adicionar um
+bloco paralelo. Segunda tentativa corrigida e validada.
+
 ## Próximos passos
 
-- Primeira funcionalidade de ponta a ponta concluída: cadastro de história
-  (model, controller, rota, `app.js` e front-end).
-- Autor vai testar manualmente no navegador (cadastro de história com campo vazio
-  e preenchido, conferindo o registro no banco).
-- Próximas funcionalidades a repetir o mesmo processo (model → controller → rota →
-  front-end): listagem de histórias (`historias.html`, `minhas-historias.html`),
-  detalhe de história (`historia-detalhe.html`), fases de vida no formulário (hoje
-  fixas no `<select>` do `nova-historia.html`), e cadastro/login de usuário real
-  (atualmente a tabela `usuario` do schema antigo ainda está em uso por
-  `usuarioModel.js`/`usuarioController.js`, criados para o domínio "aquatech" —
-  precisam de revisão para o domínio atual).
+- Checklist 🔴 (prioridade alta) 100% concluído: login, `usuarioController.js` e
+  `validarSessao()` corrigidos e revisados. Login e cadastro funcionais, com
+  validação de senha forte e feedback visual de sucesso/erro.
+- Restante do checklist 🟡/🟢 ainda pendente: listagem/detalhe/edição de histórias,
+  dashboard com dados reais, perfil (salvar/apagar conta), limpeza de código morto
+  do template "aquatech", `script-tabelas.sql` desatualizado, `src/routes/index.js`,
+  sobras de copy-paste, dependência `"path"` desnecessária no `package.json`.

@@ -132,17 +132,45 @@
       nomeVar == "" ||
       emailVar == "" ||
       senhaVar == "" ||
-      confirmacaoSenhaVar == ""
+      confirmacaoSenhaVar == "" ||
+      senhaVar != confirmacaoSenhaVar
     ) {
       cardErro.style.display = "block";
       mensagem_erro.innerHTML =
         "(Mensagem de erro para todos os campos em branco)";
 
       finalizarAguardar();
+
+      cardErro.classList.remove("sucesso");
       return false;
     } else {
       setInterval(sumirMensagem, 5000);
     }
+
+      var temNumero = false;
+      var temMaiuscula = false;
+
+      for (var i = 0; i < senhaVar.length; i++) {
+        var caractereAtual = senhaVar[i];
+
+        if (caractereAtual >= '0' && caractereAtual <= '9') {
+        temNumero = true;
+        }
+
+        if (caractereAtual >= 'A' && caractereAtual <= 'Z') {
+        temMaiuscula = true;
+        }
+      }
+
+      if (senhaVar.length < 8 || !temNumero || !temMaiuscula) {
+          cardErro.style.display = "block";
+          mensagem_erro.innerHTML = "Sua senha necessita ter pelo menos 8 digítos, 1 caracter maiuscúlo e 1 número.";
+
+          cardErro.classList.remove("sucesso");
+
+          finalizarAguardar();
+          return false;
+      }
 
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
@@ -164,6 +192,8 @@
         if (resposta.ok) {
           cardErro.style.display = "block";
 
+          cardErro.classList.add("sucesso");
+
           mensagem_erro.innerHTML =
             "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
 
@@ -173,7 +203,9 @@
 
           finalizarAguardar();
         } else {
-          throw "Houve um erro ao tentar realizar o cadastro!";
+          resposta.text().then(texto => {
+                  finalizarAguardar(texto);
+          });
         }
       })
       .catch(function (resposta) {

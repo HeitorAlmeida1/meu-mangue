@@ -691,9 +691,13 @@ body {
   color: #F1E9D8;
   width: 230px;
   position: fixed;
-  border: #F2B705 3px solid;
+  border: #f20505 3px solid;
   padding: 10px;
   margin-right: 10%;
+}
+
+.card_erro.sucesso {
+  border-color: #2E6B3F;
 }
 
 .card_erro #mensagem_erro {
