@@ -25,7 +25,6 @@ function salvarHistoria(req, res) {
         res.status(400).send("Precisa-se ter uma pessoa vinculada a está história!");
     }else {
 
-        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
         historiaModel.salvarHistoria(nomeMusica, artista, dataMusica, trecho, textoCompleto, fkFaseVida, fkUsuario)
             .then(
                 function (resultado) {

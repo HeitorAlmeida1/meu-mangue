@@ -474,12 +474,43 @@ original que de fato quebrava. Explicado por que a correção precisava **substi
 a linha existente dentro do `if (email != null && nome != null)`, não adicionar um
 bloco paralelo. Segunda tentativa corrigida e validada.
 
+## Item: achado novo (gif de loading) + limpeza de código morto
+
+> me passe tudo que tem que ser feito ainda por favor, eu identifiquei um erro tbm em uma imagem na tela de login de quando voce loga e fica um tempinho tipo para carregar sabe e aparece uma imagem embaixo esta com erro acho que a imagem nao esta no repositorio mais
+
+**Resposta da IA (resumo):** checklist reapresentado atualizado (itens 🔴
+concluídos). Confirmado, por grep no projeto, que `public/assets/circle-loading.gif`
+é referenciado em `login.html`/`cadastro.html` mas não existe no repositório.
+Oferecidas 2 opções (spinner em CSS puro, ou o autor providenciar o arquivo gif).
+
+> limpe esses codigos mortos para mim por favor enquanto eu busco este gif
+
+**Resposta da IA (resumo):** diferente do padrão da conversa até aqui, o autor
+pediu explicitamente que a IA executasse a limpeza (itens 🟢 da lista), em vez de
+só orientar — autorização explícita registrada aqui. Ações realizadas pela IA:
+- Removidos `aquarioController.js`, `avisoController.js`, `empresaController.js`,
+  `medidaController.js` e os models/rotas equivalentes (código do template
+  "aquatech", não usado por nenhuma tela do projeto).
+- Removido `src/routes/index.js` (rota morta, `res.render` sem view engine
+  configurada) e sua linha correspondente no `app.js`.
+- `app.js` limpo, mantendo só os routers `usuarios` e `historias`.
+- `src/database/script-tabelas.sql` reescrito para refletir o schema real
+  (`usuario`, `fase_vida`, `historia`) em vez do schema antigo "aquatech".
+- `package.json`/`package-lock.json`: dependência `"path"` removida via
+  `npm uninstall path --save` (módulo nativo do Node, não precisa ser instalado).
+- Comentário desatualizado em `historiaController.js` (mencionava `usuarioModel.js`)
+  removido; `console.log` genérico em `nova-historia.html` corrigido para refletir
+  a função real (`salvarHistoria`, não `entrar`).
+- Validado rodando `node app.js`: servidor sobe sem erros após as remoções.
+- Autor, em paralelo, já havia adicionado `public/assets/circle-loading.gif` —
+  IA confirmou que é um GIF válido (512x512) no caminho exato esperado pelo HTML;
+  item considerado resolvido.
+
 ## Próximos passos
 
-- Checklist 🔴 (prioridade alta) 100% concluído: login, `usuarioController.js` e
-  `validarSessao()` corrigidos e revisados. Login e cadastro funcionais, com
-  validação de senha forte e feedback visual de sucesso/erro.
-- Restante do checklist 🟡/🟢 ainda pendente: listagem/detalhe/edição de histórias,
-  dashboard com dados reais, perfil (salvar/apagar conta), limpeza de código morto
-  do template "aquatech", `script-tabelas.sql` desatualizado, `src/routes/index.js`,
-  sobras de copy-paste, dependência `"path"` desnecessária no `package.json`.
+- Checklist 🔴 (prioridade alta) 100% concluído.
+- Checklist 🟢 (organização/limpeza) 100% concluído, incluindo o gif de loading.
+- Restante do checklist 🟡 pendente: listagem de histórias (`historias.html`),
+  detalhe por id + apagar (`historia-detalhe.html`), edição de história completa,
+  dashboard com dados reais, "minhas histórias" do dashboard, e perfil
+  (salvar/apagar conta) — nenhuma função de back-end criada ainda para perfil.
