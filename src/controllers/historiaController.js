@@ -43,6 +43,75 @@ function salvarHistoria(req, res) {
     }
 }
 
+function listarTodas(req, res){
+    historiaModel.listarTodas()
+    .then(
+        function (resultado) {
+            res.json(resultado);
+        }
+    ).catch(
+        function (erro) {
+            console.log(erro);
+            console.log(
+                "\nHouve um erro ao listar as histórias! Erro: ",
+                erro.sqlMessage
+            );
+            res.status(500).json(erro.sqlMessage);
+        }
+    );
+}
+
+function listarPorUsuario(req, res){
+    var idUsuario = req.params.idUsuario;
+
+    if (idUsuario == undefined){
+         res.status(400).send("O id do usuário está undefined!");
+    }else {
+        historiaModel.listarPorUsuario(idUsuario)
+    .then(
+        function (resultado) {
+            res.json(resultado);
+        }
+    ).catch(
+        function (erro) {
+            console.log(erro);
+            console.log(
+                "\nHouve um erro ao listar as histórias! Erro: ",
+                erro.sqlMessage
+            );
+            res.status(500).json(erro.sqlMessage);
+        }
+    );
+    }
+}
+
+function buscarPorId(req, res){
+    var idHistoria = req.params.idHistoria;
+
+    if (idHistoria == undefined){
+         res.status(400).send("O id da história está undefined!");
+    }else {
+        historiaModel.buscarPorId(idHistoria)
+    .then(
+        function (resultado) {
+            res.json(resultado);
+        }
+    ).catch(
+        function (erro) {
+            console.log(erro);
+            console.log(
+                "\nHouve um erro ao listar as histórias! Erro: ",
+                erro.sqlMessage
+            );
+            res.status(500).json(erro.sqlMessage);
+        }
+    );
+    }
+}
+
 module.exports = {
-    salvarHistoria
+    salvarHistoria,
+    listarTodas,
+    listarPorUsuario,
+    buscarPorId
 }

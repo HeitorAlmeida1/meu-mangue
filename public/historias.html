@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
-<body>
+<body onload="listarHistorias()">
 
     <div class="header">
       <div class="container">
@@ -46,97 +46,13 @@
             <p class="epigrafe">“E eu quis me colocar num ônibus com direção ao futuro,<br> E eu pretendo passar o dia me observando atenta.”</p>
 
             <div class="filtros_historias">
-                <button class="filtro_pill filtro_ativo">Todas</button>
-                <button class="filtro_pill">Infância</button>
-                <button class="filtro_pill">Adolescência</button>
-                <button class="filtro_pill">Hoje</button>
+                <button class="filtro_pill filtro_ativo" onclick="filtrar('Todas', this)">Todas</button>
+                <button class="filtro_pill" onclick="filtrar('Infância', this)">Infância</button>
+                <button class="filtro_pill"  onclick="filtrar('Adolescência', this)">Adolescência</button>
+                <button class="filtro_pill" onclick="filtrar('Hoje', this)">Hoje</button>
             </div>
 
-            <div class="lista_historias">
-                <a class="card_historia" href="historia-detalhe.html?id=1">
-                    <div class="historia_card_imagem">
-                        <img src="assets/caranguejo.png" alt="icone da historia">
-                    </div>
-                    <div class="historia_card_corpo">
-                        <span class="historia_card_numero">01</span>
-                        <span class="tag_fase">Infância</span>
-                        <h3>Céu da boca</h3>
-                        <span>Ivete Sangalo &middot; 2004</span>
-                        <p>Eu quero beijar a sua boca louca</p>
-                        <span class="autor_historia">Por Heitor Torres</span>
-                    </div>
-                </a>
-
-                <a class="card_historia" href="historia-detalhe.html?id=2">
-                    <div class="historia_card_imagem">
-                        <img src="assets/mangue.png" alt="icone da historia">
-                    </div>
-                    <div class="historia_card_corpo">
-                        <span class="historia_card_numero">02</span>
-                        <span class="tag_fase">Hoje</span>
-                        <h3>Monólogo ao pé do ouvido</h3>
-                        <span>Chico Science &middot; 1994</span>
-                        <p>O medo da origem ao mal, O homem coletivo sente a necessidade de lutar</p>
-                        <span class="autor_historia">Por Heitor Torres</span>
-                    </div>
-                </a>
-
-                <a class="card_historia" href="historia-detalhe.html?id=3">
-                    <div class="historia_card_imagem">
-                        <img src="assets/alfaia.png" alt="icone da historia">
-                    </div>
-                    <div class="historia_card_corpo">
-                        <span class="historia_card_numero">03</span>
-                        <span class="tag_fase">Adolescência</span>
-                        <h3>On my mind</h3>
-                        <span>Jorja Smith &middot; 2017</span>
-                        <p>Don't want you on my mind.</p>
-                        <span class="autor_historia">Por Heitor Torres</span>
-                    </div>
-                </a>
-
-                <a class="card_historia" href="historia-detalhe.html?id=4">
-                    <div class="historia_card_imagem">
-                        <img src="assets/mangue.png" alt="icone da historia">
-                    </div>
-                    <div class="historia_card_corpo">
-                        <span class="historia_card_numero">04</span>
-                        <span class="tag_fase">Hoje</span>
-                        <h3>Mania de você</h3>
-                        <span>Rita Lee &middot; 1979</span>
-                        <p>A gente faz amor por telepatia.</p>
-                        <span class="autor_historia">Por Heitor Torres</span>
-                    </div>
-                </a>
-
-                <a class="card_historia" href="historia-detalhe.html?id=5">
-                    <div class="historia_card_imagem">
-                        <img src="assets/alfaia.png" alt="icone da historia">
-                    </div>
-                    <div class="historia_card_corpo">
-                        <span class="historia_card_numero">05</span>
-                        <span class="tag_fase">Adolescência</span>
-                        <h3>Japan</h3>
-                        <span>Yot Club &middot; 2019</span>
-                        <p>They are calling your name, but you're walking'round the mist.</p>
-                        <span class="autor_historia">Por Heitor Torres</span>
-                    </div>
-                </a>
-
-                <a class="card_historia" href="historia-detalhe.html?id=6">
-                    <div class="historia_card_imagem">
-                        <img src="assets/caranguejo.png" alt="icone da historia">
-                    </div>
-                    <div class="historia_card_corpo">
-                        <span class="historia_card_numero">06</span>
-                        <span class="tag_fase">Infância</span>
-                        <h3>Lavar as mãos</h3>
-                        <span>Palavra Cantada &middot; 2017</span>
-                        <p>Lava uma mão, lava outra.</p>
-                        <span class="autor_historia">Por Heitor Torres</span>
-                    </div>
-                </a>
-            </div>
+            <div class="lista_historias" id="lista_historias"></div>
         </div>
     </div>
 
@@ -162,3 +78,60 @@
 </body>
 
 </html>
+
+<script>
+
+    var todasHistorias = [];
+
+    function desenharCards(historias){
+        var htmlCards = "";
+            for (var i = 0; i < historias.length; i++){
+            var historia = historias[i];
+                htmlCards += `<a class='card_historia' href='historia-detalhe.html?id=${historia.id}'>
+                                <div class="historia_card_imagem">
+                                <img src="assets/caranguejo.png" alt="icone da historia">
+                                </div>
+                                <div class="historia_card_corpo">
+                                <span class="historia_card_numero">${i + 1}</span>
+                                <span class="tag_fase">${historia.fase}</span>
+                                <h3>${historia.nome_musica}</h3>
+                                <span>${historia.artista} &middot; ${historia.data_musica.slice(0, 4)}</span>
+                                <p>${historia.trecho}</p>
+                                <span class="autor_historia">Por ${historia.autor}</span>
+                                </div>
+                                </a>`;
+            }
+            lista_historias.innerHTML = htmlCards;
+    }
+
+    function listarHistorias(){
+
+        fetch("/historias/listarTodas").then(function (resposta) {
+        if (resposta.ok) {
+            resposta.json().then(function (json) {
+                todasHistorias = json;
+                desenharCards(json);
+            });
+        }
+    })
+    }
+
+    function filtrar(fase, botaoClicado) {
+
+    var botoes = document.querySelectorAll(".filtro_pill");
+    for (var i = 0; i < botoes.length; i++) {
+    botoes[i].classList.remove("filtro_ativo");
+    }
+    botaoClicado.classList.add("filtro_ativo");
+
+    var filtradas = [];
+
+    for (var i = 0; i < todasHistorias.length; i++) {
+        if (todasHistorias[i].fase == fase || fase == 'Todas') {
+            filtradas.push(todasHistorias[i]);
+        }
+    }
+
+    desenharCards(filtradas);
+}
+</script>

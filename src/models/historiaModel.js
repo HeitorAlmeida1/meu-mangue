@@ -12,6 +12,30 @@ function salvarHistoria(nomeMusica, artista, dataMusica, trecho, textoCompleto, 
     return database.executar(instrucaoSql);
 }
 
+function listarTodas(){
+
+    var instrucaoSql = `SELECT h.id, h.nome_musica, h.artista, h.data_musica, h.trecho, f.nome AS fase, u.nome AS autor FROM historia h JOIN fase_vida f ON h.fk_fase_vida = f.id JOIN usuario u ON h.fk_usuario = u.id ORDER BY h.data_publicacao DESC`
+
+    return database.executar(instrucaoSql)
+}
+
+function listarPorUsuario(idUsuario){
+
+    var instrucaoSql = `SELECT h.id, h.nome_musica, h.artista, h.data_musica, h.trecho, f.nome AS fase, u.nome AS autor FROM historia h JOIN fase_vida f ON h.fk_fase_vida = f.id JOIN usuario u ON h.fk_usuario = u.id WHERE h.fk_usuario = '${idUsuario}' ORDER BY h.data_publicacao DESC`
+
+    return database.executar(instrucaoSql)
+}
+
+function buscarPorId(idHistoria){
+
+    var instrucaoSql = `SELECT h.fk_fase_vida, h.texto_completo, h.id, h.nome_musica, h.artista, h.data_musica, h.trecho, f.nome AS fase, u.nome AS autor FROM historia h JOIN fase_vida f ON h.fk_fase_vida = f.id JOIN usuario u ON h.fk_usuario = u.id WHERE h.id = '${idHistoria}'`
+
+    return database.executar(instrucaoSql)
+}
+
 module.exports = {
-    salvarHistoria
+    salvarHistoria,
+    listarTodas,
+    listarPorUsuario,
+    buscarPorId
 };

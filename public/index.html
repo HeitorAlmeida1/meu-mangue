@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
-<body>
+<body onload="listarUltimas()">
     <div class="header">
       <div class="container">
         <h1 class="titulo">
@@ -60,55 +60,13 @@
         <div class="social_cabecalho">
           <div>
             <span class="eyebrow">// Novidades</span>
-            <h4 class="ultimas_historias_titulo">Últimas histórias</h4>
+            <h4 class="ultimas_historias_titulo" id="ultimas_historias_titulo">Últimas histórias</h4>
           </div>
           <a class="ver_todas" href="historias.html">Ver todas</a>
         </div>
 
-        <div class="ultimas_historias_cards">
-          <a class="historia_card" href="historia-detalhe.html?id=1">
-            <div class="historia_card_imagem">
-              <img src="assets/caranguejo.png" alt="icone da historia">
-            </div>
-            <div class="historia_card_corpo">
-              <span class="historia_card_numero">01</span>
-              <span class="tag_fase">Infância</span>
-              <h5>Céu da boca</h5>
-              <span>Ivete Sangalo &middot; 2004</span>
-              <p>Eu quero beijar a sua boca louca</p>
-              <span class="autor_historia">Por Heitor Torres</span>
-            </div>
-          </a>
-
-          <a class="historia_card" href="historia-detalhe.html?id=2">
-            <div class="historia_card_imagem">
-              <img src="assets/mangue.png" alt="icone da historia">
-            </div>
-            <div class="historia_card_corpo">
-              <span class="historia_card_numero">02</span>
-              <span class="tag_fase">Hoje</span>
-              <h5>Monólogo ao pé do ouvido</h5>
-              <span>Chico Science &middot; 1994</span>
-              <p>O medo da origem ao mal, O homem coletivo sente a necessidade de lutar</p>
-              <span class="autor_historia">Por Heitor Torres</span>
-            </div>
-          </a>
-
-          <a class="historia_card" href="historia-detalhe.html?id=3">
-            <div class="historia_card_imagem">
-              <img src="assets/alfaia.png" alt="icone da historia">
-            </div>
-            <div class="historia_card_corpo">
-              <span class="historia_card_numero">03</span>
-              <span class="tag_fase">Adolescência</span>
-              <h5>On my mind</h5>
-              <span>Jorja Smith &middot; 2017</span>
-              <p>Don't want you on my mind.</p>
-              <span class="autor_historia">Por Heitor Torres</span>
-            </div>
-          </a>
-        </div>
-      </div>
+        <div class="ultimas_historias_cards" id="ultimas_historias_cards"></div>
+      </div>  
     </div>
 
     <div class="sobre">
@@ -145,3 +103,37 @@
   </body>
 
 </html>
+
+<script>
+
+  function desenharCards(historias){
+        var htmlCards = "";
+            for (var i = 0; i < historias.length && i < 3; i++){
+            var historia = historias[i];
+                htmlCards += `<a class='historia_card' href='historia-detalhe.html?id=${historia.id}'>
+                                <div class="historia_card_imagem">
+                                <img src="assets/caranguejo.png" alt="icone da historia">
+                                </div>
+                                <div class="historia_card_corpo">
+                                <span class="historia_card_numero">${i + 1}</span>
+                                <span class="tag_fase">${historia.fase}</span>
+                                <h5>${historia.nome_musica}</h5>
+                                <span>${historia.artista} &middot; ${historia.data_musica.slice(0, 4)}</span>
+                                <p>${historia.trecho}</p>
+                                <span class="autor_historia">Por ${historia.autor}</span>
+                                </div>
+                                </a>`;
+            }
+            ultimas_historias_cards.innerHTML = htmlCards;
+    }
+
+  function listarUltimas(){
+    fetch("/historias/listarTodas").then(function (resposta) {
+        if (resposta.ok) {
+            resposta.json().then(function (json) {
+                desenharCards(json);
+            });
+        }
+    })
+  }
+</script>

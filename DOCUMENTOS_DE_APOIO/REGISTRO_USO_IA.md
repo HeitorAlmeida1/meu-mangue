@@ -506,11 +506,119 @@ só orientar — autorização explícita registrada aqui. Ações realizadas pe
   IA confirmou que é um GIF válido (512x512) no caminho exato esperado pelo HTML;
   item considerado resolvido.
 
-## Próximos passos
+## 2026-11-09 — Rotas de leitura (GET) e primeira tela ligada ao banco
 
-- Checklist 🔴 (prioridade alta) 100% concluído.
-- Checklist 🟢 (organização/limpeza) 100% concluído, incluindo o gif de loading.
-- Restante do checklist 🟡 pendente: listagem de histórias (`historias.html`),
-  detalhe por id + apagar (`historia-detalhe.html`), edição de história completa,
-  dashboard com dados reais, "minhas histórias" do dashboard, e perfil
-  (salvar/apagar conta) — nenhuma função de back-end criada ainda para perfil.
+> ola vamos terminar o back end hoje me passa a lista do que tenho que fazer por favor
+
+**Resposta da IA (resumo):** levantamento do estado real do back-end (só 3 rotas,
+todas `POST` — o "C" do CRUD) e lista das 8 funcionalidades faltantes, organizadas
+em tabela com verbo HTTP, comando SQL e tela que vai consumir cada uma. Explicados
+os dois conceitos novos que apareceriam: `req.params` (dado vindo pela URL, em
+oposição ao `req.body`) e os verbos `GET`/`PUT`/`DELETE` nas rotas.
+
+### Itens 1, 2 e 3 do back-end (rotas de leitura)
+
+> bora pelo item 1 / bora pro item 2 / bora pro item 3
+>
+> corrigi, dá uma olhada de novo *(várias rodadas por item)*
+
+**Resposta da IA (resumo):** guias passo a passo (model → controller → rota) para:
+1. `listarTodas` — `SELECT` com dois `JOIN` (trazendo `fase` e `autor` das tabelas
+   relacionadas em vez dos ids) + `ORDER BY data_publicacao DESC`, acrescentado pelo
+   autor por iniciativa própria depois de a IA comentar a ordenação aleatória.
+2. `listarPorUsuario` — introdução de `req.params` e do coringa `:idUsuario` na
+   rota, com `WHERE fk_usuario`, explicando a ordem fixa das cláusulas SQL
+   (`SELECT ... FROM ... JOIN ... WHERE ... ORDER BY`).
+3. `buscarPorId` — `WHERE h.id`, trazendo também `texto_completo` e `fk_fase_vida`
+   (este último pensando na futura tela de edição).
+
+Erros identificados pela IA ao longo das revisões, todos corrigidos pelo autor:
+texto em português da instrução copiado como se fosse código; chamada ao model sem
+passar o argumento; nome de função do model trocado; coringa `:idUsuario` ausente
+na rota; vírgula no lugar de ponto-e-vírgula no `module.exports` (erro de sintaxe
+que impedia o servidor de subir). A IA testou cada rota pronta com requisições
+reais ao servidor local, confirmando os retornos.
+
+Dúvidas conceituais do autor respondidas no caminho: se cada funcionalidade exigia
+arquivos novos (não — um conjunto de arquivos por *recurso*, não por funcionalidade)
+e por que o `SELECT` devolve um array mesmo com um só resultado (e a implicação de
+precisar usar `[0]` no front-end).
+
+### Mudança de estratégia (proposta pelo autor)
+
+> nao seria legal ja ligar essas telas com isto ? deixar 100%
+
+**Resposta da IA (resumo):** proposta do autor acatada e validada como melhor que a
+original — fazer "fatias verticais" (back + front de cada funcionalidade) em vez de
+todo o back-end primeiro, porque só ligando a tela se testa de verdade e, se faltar
+tempo, há telas prontas em vez de um back-end sem interface.
+
+### `historias.html` ligada ao banco
+
+**Resposta da IA (resumo):** guia para substituir os 6 cards fixos no HTML por
+cards gerados dinamicamente: dar `id` ao container, guardar um card como molde,
+montar o HTML dentro de um `for` com template string e injetar com `innerHTML`;
+`.slice(0, 4)` para extrair o ano da data vinda do banco. Depois, filtros por fase
+funcionando: separação da lógica em duas funções (`listarHistorias` busca,
+`desenharCards` desenha), variável guardando a lista completa, função `filtrar`
+com `push` e condição cobrindo o caso "Todas", e destaque do botão ativo com
+`querySelectorAll` + `classList`.
+
+Erros corrigidos nas revisões: função inexistente chamada no `onload`; valores
+colocados no atributo `class` em vez do conteúdo da tag; `fetch` apagado por engano
+ao reorganizar as funções; linhas antigas deixadas soltas fora do `fetch`; condição
+do filtro sem o caso "Todas"; e um elemento de outra tela (`cardErro`) copiado para
+dentro do loop dos botões.
+
+**Nota de transparência:** depois de o autor relatar duas vezes que as explicações
+estavam confusas, a IA mostrou um trecho pronto de três linhas (o bloco que limpa o
+destaque dos botões e marca o clicado), em vez de manter o formato de orientação —
+o conceito (`classList`, loop, elemento da vez) já havia sido explicado nas rodadas
+anteriores. Fora esse trecho, todo o código desta sessão foi escrito pelo autor.
+
+**Resultado:** `historias.html` 100% funcional — lista vinda do banco, ordenada,
+com filtros por fase e destaque visual correto, validado pela IA no navegador.
+
+### `index.html` ligada ao banco (seção "Últimas histórias")
+
+> bora pela index entao
+
+**Resposta da IA (resumo):** levantamento das diferenças de marcação entre as duas
+telas (container `ultimas_historias_cards` em vez de `lista_historias`, card
+`historia_card` em vez de `card_historia`, título em `<h5>` em vez de `<h3>`) e
+guia para reaproveitar a mesma rota `listarTodas` já pronta. Conceito novo
+introduzido: limitar o loop a 3 resultados com `i < historias.length && i < 3`,
+explicando por que a segunda condição sozinha (`i < 3`) seria insegura caso o banco
+tivesse menos de 3 histórias, e por que as 3 primeiras já são as mais recentes
+(a ordenação vem do `ORDER BY` feito no banco).
+
+Erros corrigidos nas revisões: `id` colocado no `<h4>` do título em vez do `<div>`
+container (e, na rodada seguinte, container ainda sem `id`); referência a
+`lista_historias`, elemento que só existe na outra tela; classes e tag de título
+não adaptadas; limite de 3 ausente; e uma variável de filtro (`todasHistorias`)
+copiada sem necessidade, já que esta tela não tem filtros.
+
+**Resultado:** home exibindo exatamente as 3 histórias mais recentes do banco,
+validado pela IA no navegador.
+
+## Próximos passos (retomar em 2026-11-10)
+
+**Concluído até aqui:** checklists 🔴 e 🟢; rotas `listarTodas`, `listarPorUsuario`
+e `buscarPorId`; telas `historias.html` e `index.html` ligadas ao banco.
+
+**Back-end pendente:**
+- Apagar história (`DELETE` + `req.params`)
+- Atualizar história (`PUT`)
+- Métricas do dashboard (`COUNT`/`GROUP BY`)
+- Atualizar e apagar usuário (perfil) — nenhuma função criada ainda
+
+**Front-end pendente:**
+- `historia-detalhe.html` — rota `buscarPorId` **já pronta e testada**; a tela já
+  tem o `URLSearchParams` lendo o `?id=` da URL; atenção ao fato de o retorno vir
+  como array (usar `[0]`)
+- `minhas-historias.html` — rota `listarPorUsuario` **já pronta e testada**
+- `dashboard.html` — depende das métricas
+- `meu-perfil.html` — depende das rotas de usuário
+
+**Sugestão de retomada:** `historia-detalhe.html`, por ser o destino dos cards que
+já funcionam e por já ter a rota pronta.
