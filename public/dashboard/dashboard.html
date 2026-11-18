@@ -71,15 +71,7 @@
                         <div class="dash_grafico">
                             <h4>Impacto médio por fase</h4>
                             <canvas id="grafico_impacto"></canvas>
-                        </div>
-                        <div class="dash_grafico dash_grafico_largo">
-                            <h4>Gêneros por fase da vida</h4>
-                            <canvas id="grafico_genero_fase"></canvas>
-                        </div>
-                        <div class="dash_grafico dash_grafico_largo">
-                            <h4>De que décadas são as minhas músicas</h4>
-                            <canvas id="grafico_decadas"></canvas>
-                        </div>
+                        </div>  
                     </div>
 
                     <div class="dash_secao">
@@ -234,83 +226,4 @@
             }
         });
     }
-
-    function desenharDecadas(porDecada) {
-        var dados = separarEmColunas(porDecada, "decada", "total");
-
-        new Chart(grafico_decadas, {
-            type: "bar",
-            data: {
-                labels: dados.rotulos,
-                datasets: [{
-                    label: "Músicas",
-                    data: dados.valores,
-                    backgroundColor: CORES[2]
-                }]
-            },
-            options: {
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, ticks: { precision: 0 } }
-                }
-            }
-        });
-    }
-
-    // Este é o mais trabalhoso: o banco devolve uma linha por combinação de
-    // gênero e fase, e o gráfico precisa de uma barra por gênero, dividida por fase.
-    function desenharGeneroPorFase(porGeneroEFase) {
-        var generos = [];
-        var fases = [];
-
-        for (var i = 0; i < porGeneroEFase.length; i++) {
-            if (generos.indexOf(porGeneroEFase[i].genero) == -1) {
-                generos.push(porGeneroEFase[i].genero);
-            }
-            if (fases.indexOf(porGeneroEFase[i].fase) == -1) {
-                fases.push(porGeneroEFase[i].fase);
-            }
-        }
-
-        // Para cada fase, um conjunto de barras com o total de cada gênero.
-        var conjuntos = [];
-
-        for (var f = 0; f < fases.length; f++) {
-            var valores = [];
-
-            for (var g = 0; g < generos.length; g++) {
-                var total = 0;
-
-                for (var i = 0; i < porGeneroEFase.length; i++) {
-                    if (porGeneroEFase[i].fase == fases[f] && porGeneroEFase[i].genero == generos[g]) {
-                        total = porGeneroEFase[i].total;
-                    }
-                }
-
-                valores.push(total);
-            }
-
-            conjuntos.push({
-                label: fases[f],
-                data: valores,
-                backgroundColor: CORES[f]
-            });
-        }
-
-        new Chart(grafico_genero_fase, {
-            type: "bar",
-            data: {
-                labels: generos,
-                datasets: conjuntos
-            },
-            options: {
-                plugins: { legend: { position: "bottom" } },
-                scales: {
-                    x: { stacked: true },
-                    y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } }
-                }
-            }
-        });
-    }
-
 </script>
