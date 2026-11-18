@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>MEU MANGUE</title>
-
     <link rel="stylesheet" href="./../css/estilo.css">
     <link rel="stylesheet" href="./../css/dashboards.css">
     <link rel="icon" href="./../assets/caranguejo_sem_moldura.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-
     <script src="../js/sessao.js"></script>
 </head>
-
 <body onload="montarNavbar('dashboard'); validarSessao(); carregarPerfil()">
 
     <div class="header">
@@ -63,31 +58,23 @@
             </div>
         </div>
     </div>
-
 </body>
-
 </html>
-
 <script>
-
     function carregarPerfil() {
         nome_input.value = sessionStorage.NOME_USUARIO;
         email_input.value = sessionStorage.EMAIL_USUARIO;
     }
-
     function salvarPerfil() {
         var perfil = {
             nomeServer: nome_input.value,
             emailServer: email_input.value,
-            // Campo em branco significa "manter a senha atual" — o back-end trata isso.
             senhaServer: senha_input.value
         };
-
         if (perfil.nomeServer == "" || perfil.emailServer == "") {
             alert("Preencha nome e e-mail.");
             return false;
         }
-
         fetch("/usuarios/atualizar/" + sessionStorage.ID_USUARIO, {
             method: "PUT",
             headers: {
@@ -96,7 +83,6 @@
             body: JSON.stringify(perfil)
         }).then(function (resposta) {
             if (resposta.ok) {
-                // A sessão guarda nome e e-mail, então precisa acompanhar a mudança.
                 sessionStorage.NOME_USUARIO = perfil.nomeServer;
                 sessionStorage.EMAIL_USUARIO = perfil.emailServer;
                 senha_input.value = "";
@@ -113,15 +99,12 @@
         }).catch(function (erro) {
             console.log(erro);
         })
-
         return false;
     }
-
     function apagarConta() {
         if (!confirm("Isso apaga sua conta e TODAS as suas histórias. Não dá para desfazer. Tem certeza?")) {
             return;
         }
-
         fetch("/usuarios/apagar/" + sessionStorage.ID_USUARIO, {
             method: "DELETE"
         }).then(function (resposta) {
@@ -137,5 +120,4 @@
             console.log(erro);
         })
     }
-
 </script>

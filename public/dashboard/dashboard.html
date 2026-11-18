@@ -1,31 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>MEU MANGUE</title>
-
     <link rel="stylesheet" href="./../css/estilo.css">
     <link rel="stylesheet" href="./../css/dashboards.css">
     <link rel="icon" href="./../assets/caranguejo_sem_moldura.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-
     <script src="../js/sessao.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
-
 <body onload="montarNavbar('dashboard'); validarSessao(); carregarDashboard()">
-
     <div class="header">
       <div class="container">
         <h1 class="titulo"><img class="logo-titulo" src="../assets/caranguejo.svg" alt="logo caranguejo">MEU <span class="recorte">MANGUE</span></h1>
         <ul class="navbar" id="navbar"></ul>
       </div>
     </div>
-
     <div class="faixa_divisoria"></div>
 
     <div class="dash_pagina">
@@ -85,16 +78,10 @@
             </div>
         </div>
     </div>
-
 </body>
-
 </html>
-
 <script>
-
-    // Cores da identidade visual do projeto, usadas em todos os gráficos.
     var CORES = ["#E2582A", "#F2B705", "#2E6B3F", "#3B2A1E", "#D9381E", "#6B5F50"];
-
     function carregarDashboard() {
         fetch("/historias/dadosDashboard/" + sessionStorage.ID_USUARIO).then(function (resposta) {
             if (resposta.ok) {
@@ -111,17 +98,13 @@
         }).catch(function (erro) {
             console.log(erro);
         })
-
         listarMinhasHistorias();
     }
-
     function preencherMetricas(dados) {
         total_minhas.innerHTML = dados.totalMinhas;
         total_site.innerHTML = dados.totalSite;
-        // Quem ainda não publicou nada não tem média: o banco devolve null.
         impacto_medio.innerHTML = dados.impactoMedio == null ? "—" : dados.impactoMedio;
     }
-
     function preencherDestaque(destaque) {
         if (destaque == undefined) {
             dash_destaque.style.display = "none";
@@ -134,28 +117,22 @@
             window.location = "../historia-detalhe.html?id=" + destaque.id;
         };
     }
-
     function listarMinhasHistorias() {
         fetch("/historias/listarPorUsuario/" + sessionStorage.ID_USUARIO).then(function (resposta) {
             if (resposta.ok) {
                 resposta.json().then(function (json) {
-
                     if (json.length == 0) {
                         lista_minhas_historias.innerHTML = `<div class="dash_linha">
                                                                 <div class="dash_linha_musica">Você ainda não publicou nenhuma história.</div>
                                                             </div>`;
                         return;
                     }
-
                     var htmlLinhas = "";
-
-                    // Na visão geral mostramos só as 5 mais recentes.
                     for (var i = 0; i < json.length && i < 5; i++) {
                         htmlLinhas += `<div class="dash_linha">
                                         <div class="dash_linha_musica">${json[i].nome_musica} &mdash; ${json[i].artista}</div>
                                        </div>`;
                     }
-
                     lista_minhas_historias.innerHTML = htmlLinhas;
                 });
             }
@@ -163,31 +140,23 @@
             console.log(erro);
         })
     }
-
     function desenharGraficos(dados) {
         desenharFases(dados.porFase);
         desenharImpacto(dados.impactoPorFase);
         desenharGeneroPorFase(dados.porGeneroEFase);
         desenharDecadas(dados.porDecada);
     }
-
-    // Separa uma lista de objetos em dois arrays: um de rótulos e um de valores,
-    // que é o formato que o Chart.js espera.
     function separarEmColunas(lista, campoRotulo, campoValor) {
         var rotulos = [];
         var valores = [];
-
         for (var i = 0; i < lista.length; i++) {
             rotulos.push(lista[i][campoRotulo]);
             valores.push(lista[i][campoValor]);
         }
-
         return { rotulos: rotulos, valores: valores };
     }
-
     function desenharFases(porFase) {
         var dados = separarEmColunas(porFase, "fase", "total");
-
         new Chart(grafico_fases, {
             type: "doughnut",
             data: {
@@ -204,10 +173,8 @@
             }
         });
     }
-
     function desenharImpacto(impactoPorFase) {
         var dados = separarEmColunas(impactoPorFase, "fase", "media");
-
         new Chart(grafico_impacto, {
             type: "bar",
             data: {

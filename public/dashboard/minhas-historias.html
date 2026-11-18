@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>MEU MANGUE</title>
-
     <link rel="stylesheet" href="./../css/estilo.css">
     <link rel="stylesheet" href="./../css/dashboards.css">
     <link rel="icon" href="./../assets/caranguejo_sem_moldura.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-
     <script src="../js/sessao.js"></script>
 </head>
-
 <body onload="montarNavbar('dashboard'); validarSessao(); listarMinhasHistorias()">
 
     <div class="header">
@@ -48,13 +43,9 @@
             </div>
         </div>
     </div>
-
 </body>
-
 </html>
-
 <script>
-
     function listarMinhasHistorias() {
         fetch("/historias/listarPorUsuario/" + sessionStorage.ID_USUARIO).then(function (resposta) {
             if (resposta.ok) {
@@ -66,12 +57,9 @@
                                                      </div>`;
                         return;
                     }
-
                     var htmlLinhas = "";
-
                     for (var i = 0; i < json.length; i++) {
                         var historia = json[i];
-
                         htmlLinhas += `<div class="dash_linha">
                                         <div class="dash_linha_musica">${historia.nome_musica} &mdash; ${historia.artista}</div>
                                         <div class="dash_linha_acoes">
@@ -80,7 +68,6 @@
                                         </div>
                                        </div>`;
                     }
-
                     lista_historias.innerHTML = htmlLinhas;
                 });
             } else {
@@ -92,22 +79,18 @@
             console.log(erro);
         })
     }
-
     function editar(idHistoria) {
         sessionStorage.ID_HISTORIA_EDITANDO = idHistoria;
         window.location = "../nova-historia.html";
     }
-
     function apagar(idHistoria) {
         if (!confirm("Tem certeza que quer apagar esta história? Não dá para desfazer.")) {
             return;
         }
-
         fetch("/historias/apagar/" + idHistoria, {
             method: "DELETE"
         }).then(function (resposta) {
             if (resposta.ok) {
-                // Recarrega a lista para a linha apagada sumir da tela.
                 listarMinhasHistorias();
             } else {
                 resposta.text().then(function (texto) {
@@ -118,5 +101,4 @@
             console.log(erro);
         })
     }
-
 </script>
