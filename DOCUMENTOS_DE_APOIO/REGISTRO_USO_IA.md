@@ -622,3 +622,111 @@ e `buscarPorId`; telas `historias.html` e `index.html` ligadas ao banco.
 
 **Sugestão de retomada:** `historia-detalhe.html`, por ser o destino dos cards que
 já funcionam e por já ter a rota pronta.
+
+## 2026-11-17 — Plano completo do que falta (back-end + ligação com o front)
+
+> me passe tudo que eu tenho que fazer para deixar tudo 100% de back end e a ligaçao de back com front tbm toda essa parte
+
+**Resposta da IA (resumo):** levantamento do estado real de cada tela pendente e
+plano organizado em 6 "fatias verticais" (back + front de cada funcionalidade),
+em ordem de dependência:
+
+1. **Detalhe da história** — só front; rota `buscarPorId` já pronta. Dar `id` aos
+   7 elementos de `historia-detalhe.html` e preencher com os dados.
+2. **Minhas histórias** — só front; rota `listarPorUsuario` já pronta. Trocar as
+   linhas fixas por dados do banco usando `sessionStorage.ID_USUARIO`.
+3. **Apagar história** — back (`DELETE FROM` + rota `router.delete`) e front
+   (ligar `apagarHistoria()` e `apagar()`, hoje só `console.log`).
+4. **Editar história** — back (`UPDATE` + rota `router.put`) e front, em três
+   partes: carregar os dados no formulário, pré-selecionar o `<select>` de fase
+   (usando o `fk_fase_vida` já trazido na query), e fazer `salvarHistoria()`
+   decidir entre criar (POST) e atualizar (PUT).
+5. **Dashboard** — back (consultas com `COUNT`) e front (métricas, destaque, lista).
+6. **Perfil** — back (`atualizar` e `apagar` usuário, inexistentes até aqui) e
+   front (`salvarPerfil()` e `apagarConta()`).
+
+**Três decisões de escopo levantadas pela IA, por não serem questões técnicas:**
+- (A) A métrica "Histórias lidas" do dashboard **não tem como ser calculada** — o
+  banco não registra leituras em nenhuma tabela ou coluna. Precisa ser removida,
+  substituída por outra métrica, ou exigiria modelagem nova.
+- (B) Não há critério definido para o card "Em destaque" (hoje com valor fixo).
+- (C) Apagar uma conta com histórias vinculadas será **recusado pelo MySQL**
+  (restrição de chave estrangeira) — é preciso decidir entre apagar as histórias
+  junto ou bloquear a exclusão.
+
+### Planejamento dos gráficos da dashboard
+
+> no momento preciso mudar algumas coisas na minha aplicação, precisava de alguns atributos a mais talvez, pois a minha dash precisaria de graficos estava pensando na hora de resgistrar as historias o usuario colocar um genero de musica ou algo do tipo para eu ter metricas para a dash pode me ajudar a pensar nisso mais na dash e graficos para ela
+
+**Resposta da IA (resumo):** discussão de modelagem, sem escrever código. Pontos
+levantados: (1) o próprio `AGENTS.md` já previa esse recurso desde o início
+("nota, frequência ou impacto" para alimentar a dashboard), tendo sido adiado;
+(2) dados já existentes e subaproveitados que renderiam gráficos sem mudança
+nenhuma no banco — fase da vida, década da música (`data_musica`), ranking de
+artistas; (3) comparação entre modelar gênero como coluna de texto livre
+(sujeita a "Rock"/"rock"/"ROCK" quebrarem o `GROUP BY`) ou como tabela própria
+com FK, seguindo o mesmo padrão de `fase_vida` que o autor já domina;
+(4) sugestão de uma nota de impacto (1–5), que daria médias e resolveria
+objetivamente o critério do card "Em destaque"; (5) alerta de que 7 registros
+deixam qualquer gráfico pobre, recomendando popular o banco antes da
+apresentação; (6) trade-off entre riqueza de métricas e fricção no formulário.
+
+**Decisões do autor:** gênero como tabela própria, nota de impacto incluída,
+gráficos em Chart.js, sem número mínimo exigido — só os úteis.
+
+> pode me listar oque eu precisaria mudar na dash e ate mesmo banco modelagem tudo asism para eu fazer isto ? e ja coloca junto com a lista dos itens de back/front que preciso mexer, e se achar algo a mais no projeto que preciso mexer para deixar 100% ja liste tbm por favor
+
+**Resposta da IA (resumo):** varredura completa do projeto e criação do arquivo
+`DOCUMENTOS_DE_APOIO/PLANO_PENDENCIAS.md`, consolidando em 8 partes ordenadas por
+dependência: banco, ajustes no back-end existente, rotas novas, formulário,
+telas de leitura, dashboard e gráficos, perfil, e achados extras. Quatro
+pendências novas foram identificadas nessa varredura, além das já conhecidas:
+`nova-historia.html` não chama `validarSessao()` (acessível sem login, o que faz
+o cadastro falhar); `historia-detalhe.html` exibe os botões Editar/Apagar para
+qualquer visitante, inclusive em histórias de terceiros; placeholders de contato
+não preenchidos no rodapé de 4 telas; e a história de teste ainda no banco.
+Registradas também, como contexto e não como tarefas, duas características
+herdadas do template do professor (senhas em texto puro e queries montadas por
+concatenação).
+
+### Partes 1 e 2 executadas pela IA (a pedido do autor)
+
+> voce pode fazer por mim o item 1 e o 2 ??
+
+**Autorização explícita do autor.** Diferente do restante do projeto, **o código
+das Partes 1 e 2 foi escrito pela IA**, não pelo autor. A IA registrou a ressalva
+de que essas duas partes não envolviam conceito novo (SQL que o autor já havia
+feito sozinho ao modelar o banco, e acréscimo de dois campos em funções que ele
+mesmo escreveu), e que a partir da Parte 3 — com `DELETE`, `PUT` e agregações —
+voltaria ao formato de orientação, o que o autor aceitou.
+
+**Decisões do autor antes da execução:** lista de gêneros ampliada ("os mais
+diversos"); gêneros inferidos por artista e impacto neutro nas histórias
+existentes; e massa de teste totalmente fictícia (opção "c"), para ser apagada e
+substituída por histórias reais depois.
+
+**O que a IA fez:**
+- `src/database/migracao-genero-impacto.sql` (novo): cria a tabela `genero` com
+  24 gêneros, adiciona `fk_genero` e `impacto` em `historia`, preenche as
+  histórias existentes e só então torna as colunas `NOT NULL` — sequência
+  necessária porque o MySQL recusa adicionar coluna `NOT NULL` a uma tabela que
+  já contém registros.
+- `src/database/meu-mangue.sql` atualizado com o schema final.
+- `historiaModel.salvarHistoria` e as três queries de listagem ajustadas para os
+  campos novos (`JOIN genero`, `genero`, `impacto`); `buscarPorId` passou a trazer
+  também `fk_usuario`, necessário mais à frente para esconder os botões de editar
+  e apagar de quem não é dono da história.
+- `historiaController.salvarHistoria` lendo e validando `impactoServer` e
+  `fkGeneroServer`.
+- Inserção de 4 usuários fictícios (e-mails `@teste.com`) e 26 histórias de teste,
+  variadas em gênero, década, fase e impacto, mantendo intactas as 6 histórias
+  reais do autor.
+
+**Validação:** migração conferida no banco (24 gêneros, 7 histórias atualizadas),
+rotas testadas via requisição real, e tela `historias.html` verificada no
+navegador (33 cards, filtros corretos).
+
+**Observação técnica registrada:** o usuário de banco da aplicação
+(`insert_mangue`) tem apenas `SELECT/INSERT/UPDATE/DELETE`, sem permissão de DDL —
+por isso a migração foi escrita pela IA mas executada pelo autor com usuário
+administrador.

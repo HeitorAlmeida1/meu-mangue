@@ -24,6 +24,11 @@ CREATE TABLE fase_vida (
 	descricao VARCHAR(150)
 ) AUTO_INCREMENT = 1;
 
+CREATE TABLE genero (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	nome VARCHAR(30) NOT NULL
+) AUTO_INCREMENT = 1;
+
 CREATE TABLE historia (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	nome_musica VARCHAR(100) NOT NULL,
@@ -32,9 +37,12 @@ CREATE TABLE historia (
 	trecho VARCHAR(140) NOT NULL,
 	texto_completo TEXT NOT NULL,
 	data_publicacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+	impacto INT NOT NULL,
 	fk_fase_vida INT NOT NULL,
+	fk_genero INT NOT NULL,
 	fk_usuario INT NOT NULL,
 	FOREIGN KEY (fk_fase_vida) REFERENCES fase_vida(id),
+	FOREIGN KEY (fk_genero) REFERENCES genero(id),
 	FOREIGN KEY (fk_usuario) REFERENCES usuario(id)
 ) AUTO_INCREMENT = 1;
 
@@ -42,3 +50,10 @@ INSERT INTO fase_vida VALUES
 (DEFAULT, 'Infância', 'Músicas que marcaram a infância'),
 (DEFAULT, 'Adolescência', 'Músicas que marcaram a adolescência'),
 (DEFAULT, 'Hoje', 'Músicas que marcam o momento atual');
+
+INSERT INTO genero (nome) VALUES
+('Manguebeat'), ('MPB'), ('Rock'), ('Pop'), ('Axé'),
+('Samba'), ('Pagode'), ('Forró'), ('Sertanejo'), ('Rap'),
+('R&B'), ('Funk'), ('Reggae'), ('Indie'), ('Eletrônica'),
+('Jazz'), ('Blues'), ('Soul'), ('Infantil'), ('Gospel'),
+('Bossa Nova'), ('Punk'), ('Metal'), ('Clássica');

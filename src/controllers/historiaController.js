@@ -6,7 +6,9 @@ function salvarHistoria(req, res) {
     var dataMusica = req.body.dataMusicaServer;
     var trecho = req.body.trechoServer;
     var textoCompleto = req.body.textoCompletoServer;
+    var impacto = req.body.impactoServer;
     var fkFaseVida = req.body.fkFaseVidaServer;
+    var fkGenero = req.body.fkGeneroServer;
     var fkUsuario = req.body.fkUsuarioServer;
 
     if (nomeMusica == undefined) {
@@ -19,13 +21,17 @@ function salvarHistoria(req, res) {
         res.status(400).send("Precisa-se ter um trecho vinculado a está história!");
     } else if (textoCompleto == undefined) {
         res.status(400).send("Precisa-se ter uma historia elaborada vinculada a está história!");
+    } else if (impacto == undefined) {
+        res.status(400).send("Precisa-se ter um impacto vinculado a está história!");
     } else if (fkFaseVida == undefined) {
         res.status(400).send("Precisa-se ter uma fase de sua vida vinculada a está história!");
+    } else if (fkGenero == undefined) {
+        res.status(400).send("Precisa-se ter um gênero musical vinculado a está história!");
     } else if (fkUsuario == undefined) {
         res.status(400).send("Precisa-se ter uma pessoa vinculada a está história!");
     }else {
 
-        historiaModel.salvarHistoria(nomeMusica, artista, dataMusica, trecho, textoCompleto, fkFaseVida, fkUsuario)
+        historiaModel.salvarHistoria(nomeMusica, artista, dataMusica, trecho, textoCompleto, impacto, fkFaseVida, fkGenero, fkUsuario)
             .then(
                 function (resultado) {
                     res.json(resultado);
