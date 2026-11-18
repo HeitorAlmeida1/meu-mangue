@@ -74,7 +74,74 @@ function cadastrar(req, res) {
     }
 }
 
+function atualizar(req, res) {
+    var idUsuario = req.params.idUsuario;
+    var nome = req.body.nomeServer;
+    var email = req.body.emailServer;
+    var senha = req.body.senhaServer;
+
+    if (idUsuario == undefined) {
+        res.status(400).send("O id do usuário está undefined!");
+    } else if (nome == undefined || nome == "") {
+        res.status(400).send("Seu nome está vazio!");
+    } else if (email == undefined || email == "") {
+        res.status(400).send("Seu email está vazio!");
+    } else if (senha == undefined) {
+        res.status(400).send("Sua senha está undefined!");
+    } else {
+
+        usuarioModel.atualizar(idUsuario, nome, email, senha)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao atualizar o perfil! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
+function apagar(req, res) {
+    var idUsuario = req.params.idUsuario;
+
+    if (idUsuario == undefined) {
+        res.status(400).send("O id do usuário está undefined!");
+    } else {
+
+        // Primeiro as histórias, depois o usuário — a ordem inversa seria
+        // recusada pelo banco por causa da chave estrangeira.
+        usuarioModel.apagarHistoriasDoUsuario(idUsuario)
+            .then(
+                function () {
+                    return usuarioModel.apagar(idUsuario);
+                }
+            ).then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao apagar a conta! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    atualizar,
+    apagar
 }

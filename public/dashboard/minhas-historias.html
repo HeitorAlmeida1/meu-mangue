@@ -16,22 +16,12 @@
     <script src="../js/sessao.js"></script>
 </head>
 
-<body onload="validarSessao()">
+<body onload="montarNavbar('dashboard'); validarSessao(); listarMinhasHistorias()">
 
     <div class="header">
       <div class="container">
         <h1 class="titulo"><img class="logo-titulo" src="../assets/caranguejo.svg" alt="logo caranguejo">MEU <span class="recorte">MANGUE</span></h1>
-        <ul class="navbar">
-          <li>
-            <a href="../index.html">Home</a>
-          </li>
-          <li>
-            <a href="../historias.html">Histórias</a>
-          </li>
-          <li class="agora">
-            <a href="dashboard.html">Dashboard</a>
-          </li>
-        </ul>
+        <ul class="navbar" id="navbar"></ul>
       </div>
     </div>
 
@@ -53,23 +43,7 @@
                         <button class="dash_botao_novo" onclick="window.location='../nova-historia.html'">+ Nova história</button>
                     </div>
 
-                    <div class="dash_lista" id="lista_historias">
-                        <div class="dash_linha">
-                            <div class="dash_linha_musica">CORINTHIANS &mdash; CHICO</div>
-                            <div class="dash_linha_acoes">
-                                <button onclick="editar(1)">Editar</button>
-                                <button class="dash_apagar" onclick="apagar(1)">Apagar</button>
-                            </div>
-                        </div>
-
-                        <div class="dash_linha">
-                            <div class="dash_linha_musica">CORINTHIANS &mdash; CHICO</div>
-                            <div class="dash_linha_acoes">
-                                <button onclick="editar(2)">Editar</button>
-                                <button class="dash_apagar" onclick="apagar(2)">Apagar</button>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="dash_lista" id="lista_historias"></div>
                 </div>
             </div>
         </div>
@@ -81,7 +55,43 @@
 
 <script>
 
-    b_usuario_nome = sessionStorage.NOME_USUARIO;
+    function listarMinhasHistorias() {
+        fetch("/historias/listarPorUsuario/" + sessionStorage.ID_USUARIO).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(function (json) {
+
+                    if (json.length == 0) {
+                        lista_historias.innerHTML = `<div class="dash_linha">
+                                                        <div class="dash_linha_musica">Você ainda não publicou nenhuma história.</div>
+                                                     </div>`;
+                        return;
+                    }
+
+                    var htmlLinhas = "";
+
+                    for (var i = 0; i < json.length; i++) {
+                        var historia = json[i];
+
+                        htmlLinhas += `<div class="dash_linha">
+                                        <div class="dash_linha_musica">${historia.nome_musica} &mdash; ${historia.artista}</div>
+                                        <div class="dash_linha_acoes">
+                                            <button onclick="editar(${historia.id})">Editar</button>
+                                            <button class="dash_apagar" onclick="apagar(${historia.id})">Apagar</button>
+                                        </div>
+                                       </div>`;
+                    }
+
+                    lista_historias.innerHTML = htmlLinhas;
+                });
+            } else {
+                resposta.text().then(function (texto) {
+                    alert(texto);
+                });
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+    }
 
     function editar(idHistoria) {
         sessionStorage.ID_HISTORIA_EDITANDO = idHistoria;
@@ -89,7 +99,24 @@
     }
 
     function apagar(idHistoria) {
-        console.log("Apagar história de id:", idHistoria);
+        if (!confirm("Tem certeza que quer apagar esta história? Não dá para desfazer.")) {
+            return;
+        }
+
+        fetch("/historias/apagar/" + idHistoria, {
+            method: "DELETE"
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                // Recarrega a lista para a linha apagada sumir da tela.
+                listarMinhasHistorias();
+            } else {
+                resposta.text().then(function (texto) {
+                    alert(texto);
+                });
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        })
     }
 
 </script>

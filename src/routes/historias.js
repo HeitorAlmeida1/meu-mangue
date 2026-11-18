@@ -20,4 +20,16 @@ router.get("/buscarPorId/:idHistoria", function (req, res) {
     historiaController.buscarPorId(req, res);
 })
 
+router.delete("/apagar/:idHistoria", function (req, res) {
+    historiaController.apagar(req, res);
+})
+
+router.put("/atualizar/:idHistoria", function (req, res) {
+    historiaController.atualizar(req, res);
+})
+
+router.get("/dadosDashboard/:idUsuario", function (req, res) {
+    historiaController.dadosDashboard(req, res);
+})
+
 module.exports = router;

@@ -161,6 +161,46 @@
   background-color: #C24A22;
 }
 
+.dash_graficos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.dash_grafico {
+  background-color: #FFFFFF;
+  border: 1px solid #E3D9C4;
+  padding: 18px 20px 22px;
+}
+
+.dash_grafico_largo {
+  grid-column: span 2;
+}
+
+.dash_grafico h4 {
+  margin: 0 0 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #6B5F50;
+}
+
+.dash_grafico canvas {
+  max-height: 260px;
+}
+
+@media (max-width: 900px) {
+  .dash_graficos {
+    grid-template-columns: 1fr;
+  }
+
+  .dash_grafico_largo {
+    grid-column: span 1;
+  }
+}
+
 .dash_secao {
   margin-bottom: 28px;
 }

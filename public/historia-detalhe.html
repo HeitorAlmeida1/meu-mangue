@@ -15,25 +15,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
-<body>
+<body onload="montarNavbar('historias'); carregarHistoria()">
 
     <div class="header">
       <div class="container">
         <h1 class="titulo"><img class="logo-titulo" src="assets/caranguejo.svg" alt="logo caranguejo">MEU <span class="recorte">MANGUE</span></h1>
-        <ul class="navbar">
-          <li>
-            <a href="index.html">Home</a>
-          </li>
-          <li class="agora">
-            <a href="historias.html">Histórias</a>
-          </li>
-          <li>
-            <a href="login.html">Login</a>
-          </li>
-          <li>
-            <a href="cadastro.html">Cadastro</a>
-          </li>
-        </ul>
+        <ul class="navbar" id="navbar"></ul>
       </div>
     </div>
 
@@ -45,29 +32,37 @@
                 <img src="assets/caranguejo.png" alt="Ilustração da história">
             </div>
             <div class="detalhe_card">
-                <span class="eyebrow">// História 01</span>
-                <span class="tag_fase">Infância</span>
-                <h1 class="detalhe_musica">Céu da boca</h1>
-                <span class="detalhe_artista">Ivete Sangalo &middot; 2004</span>
+                <span class="eyebrow" id="detalhe_numero">// História</span>
+                <span class="tag_fase" id="tag_fase"></span>
+                <h1 class="detalhe_musica" id="detalhe_musica"></h1>
+                <span class="detalhe_artista" id="detalhe_artista"></span>
 
-                <p class="detalhe_texto">Está música remete a minha infância, principalmente nos fins de semanas que minha mãe estava em casa. Me recordo dela sempre ouvir Ivete enquanto fazia um almoço ou até mesmo limpava a casa, e está música retrata muito bem oque eu sinto sobre esta fase.</p>
+                <p class="detalhe_texto" id="detalhe_texto"></p>
 
                 <div class="detalhe_meta">
                     <div>
                         <span>Fase</span>
-                        <strong>Infância</strong>
+                        <strong id="meta_fase"></strong>
+                    </div>
+                    <div>
+                        <span>Gênero</span>
+                        <strong id="meta_genero"></strong>
                     </div>
                     <div>
                         <span>Ano</span>
-                        <strong>2004</strong>
+                        <strong id="meta_ano"></strong>
+                    </div>
+                    <div>
+                        <span>Impacto</span>
+                        <strong id="meta_impacto"></strong>
                     </div>
                     <div>
                         <span>Autor</span>
-                        <strong>Heitor Torres</strong>
+                        <strong id="meta_autor"></strong>
                     </div>
                 </div>
 
-                <div class="detalhe_acoes">
+                <div class="detalhe_acoes" id="detalhe_acoes" style="display: none;">
                     <button class="btn_editar" id="btn_editar" onclick="editarHistoria()">Editar</button>
                     <button class="btn_apagar" id="btn_apagar" onclick="apagarHistoria()">Apagar</button>
                 </div>
@@ -82,9 +77,9 @@
           MEU <span class="recorte">MANGUE</span>
         </div>
         <div class="footer_contatos">
-          <a href="mailto:seuemail@email.com">seuemail@email.com</a>
-          <a href="https://instagram.com/seuusuario" target="_blank">Instagram</a>
-          <a href="https://github.com/seuusuario" target="_blank">GitHub</a>
+          <a href="mailto:meumangue@email.com">meumangue@email.com</a>
+          <a href="https://instagram.com/meumangue" target="_blank">Instagram</a>
+          <a href="https://github.com/heitoralmeida1" target="_blank">GitHub</a>
         </div>
         <div class="footer_texto">
           <h4>Projeto acadêmico sem fins lucrativos &middot; 2026/2</h4>
@@ -101,12 +96,69 @@
 
     var idHistoria = new URLSearchParams(window.location.search).get("id");
 
+    function carregarHistoria() {
+        fetch("/historias/buscarPorId/" + idHistoria).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(function (json) {
+                    // O SELECT sempre devolve uma lista, mesmo com um só resultado.
+                    if (json.length == 0) {
+                        alert("História não encontrada.");
+                        window.location = "historias.html";
+                        return;
+                    }
+
+                    var historia = json[0];
+                    var ano = historia.data_musica.slice(0, 4);
+
+                    detalhe_numero.innerHTML = "// História " + historia.id;
+                    tag_fase.innerHTML = historia.fase;
+                    detalhe_musica.innerHTML = historia.nome_musica;
+                    detalhe_artista.innerHTML = historia.artista + " &middot; " + ano;
+                    detalhe_texto.innerHTML = historia.texto_completo;
+
+                    meta_fase.innerHTML = historia.fase;
+                    meta_genero.innerHTML = historia.genero;
+                    meta_ano.innerHTML = ano;
+                    meta_impacto.innerHTML = historia.impacto + "/5";
+                    meta_autor.innerHTML = historia.autor;
+
+                    // Editar e apagar só aparecem para o dono da história.
+                    if (sessionStorage.ID_USUARIO == historia.fk_usuario) {
+                        detalhe_acoes.style.display = "flex";
+                    }
+                });
+            } else {
+                resposta.text().then(function (texto) {
+                    alert(texto);
+                });
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+    }
+
     function editarHistoria() {
         sessionStorage.ID_HISTORIA_EDITANDO = idHistoria;
         window.location = "nova-historia.html";
     }
 
     function apagarHistoria() {
-        console.log("Apagar história de id:", idHistoria);
+        if (!confirm("Tem certeza que quer apagar esta história? Não dá para desfazer.")) {
+            return;
+        }
+
+        fetch("/historias/apagar/" + idHistoria, {
+            method: "DELETE"
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                window.location = "historias.html";
+            } else {
+                resposta.text().then(function (texto) {
+                    alert(texto);
+                });
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        })
     }
 </script>

@@ -14,24 +14,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 
     <script src="../js/sessao.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 
-<body onload="validarSessao()">
+<body onload="montarNavbar('dashboard'); validarSessao(); carregarDashboard()">
 
     <div class="header">
       <div class="container">
         <h1 class="titulo"><img class="logo-titulo" src="../assets/caranguejo.svg" alt="logo caranguejo">MEU <span class="recorte">MANGUE</span></h1>
-        <ul class="navbar">
-          <li>
-            <a href="../index.html">Home</a>
-          </li>
-          <li>
-            <a href="../historias.html">Histórias</a>
-          </li>
-          <li class="agora">
-            <a href="dashboard.html">Dashboard</a>
-          </li>
-        </ul>
+        <ul class="navbar" id="navbar"></ul>
       </div>
     </div>
 
@@ -53,23 +44,42 @@
                     <div class="dash_metricas">
                         <div class="dash_metrica dash_metrica_destaque">
                             <div class="dash_metrica_label">Minhas histórias</div>
-                            <div class="dash_metrica_valor" id="total_minhas">06</div>
+                            <div class="dash_metrica_valor" id="total_minhas">0</div>
                         </div>
                         <div class="dash_metrica">
-                            <div class="dash_metrica_label">Histórias lidas</div>
-                            <div class="dash_metrica_valor" id="total_lidas">14</div>
+                            <div class="dash_metrica_label">Impacto médio</div>
+                            <div class="dash_metrica_valor" id="impacto_medio">0</div>
                         </div>
                         <div class="dash_metrica">
                             <div class="dash_metrica_label">Total no site</div>
-                            <div class="dash_metrica_valor" id="total_site">37</div>
+                            <div class="dash_metrica_valor" id="total_site">0</div>
                         </div>
                     </div>
 
-                    <div class="dash_destaque">
-                        <div class="dash_destaque_tag">Em destaque</div>
-                        <h3 class="dash_destaque_musica">CORINTHIANS</h3>
-                        <div class="dash_destaque_info">CHICO &middot; por Heitor Torres</div>
-                        <button onclick="window.location='../historia-detalhe.html?id=1'">Ler história</button>
+                    <div class="dash_destaque" id="dash_destaque">
+                        <div class="dash_destaque_tag">Em destaque &middot; maior impacto</div>
+                        <h3 class="dash_destaque_musica" id="destaque_musica">—</h3>
+                        <div class="dash_destaque_info" id="destaque_info"></div>
+                        <button id="destaque_botao">Ler história</button>
+                    </div>
+
+                    <div class="dash_graficos">
+                        <div class="dash_grafico">
+                            <h4>Histórias por fase da vida</h4>
+                            <canvas id="grafico_fases"></canvas>
+                        </div>
+                        <div class="dash_grafico">
+                            <h4>Impacto médio por fase</h4>
+                            <canvas id="grafico_impacto"></canvas>
+                        </div>
+                        <div class="dash_grafico dash_grafico_largo">
+                            <h4>Gêneros por fase da vida</h4>
+                            <canvas id="grafico_genero_fase"></canvas>
+                        </div>
+                        <div class="dash_grafico dash_grafico_largo">
+                            <h4>De que décadas são as minhas músicas</h4>
+                            <canvas id="grafico_decadas"></canvas>
+                        </div>
                     </div>
 
                     <div class="dash_secao">
@@ -77,11 +87,7 @@
                             <h3>Minhas histórias</h3>
                             <a class="dash_ver_todas" href="minhas-historias.html">ver todas &rarr;</a>
                         </div>
-                        <div class="dash_lista" id="lista_minhas_historias">
-                            <div class="dash_linha">
-                                <div class="dash_linha_musica">CORINTHIANS &mdash; CHICO</div>
-                            </div>
-                        </div>
+                        <div class="dash_lista" id="lista_minhas_historias"></div>
                     </div>
                 </div>
             </div>
@@ -94,6 +100,217 @@
 
 <script>
 
-    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    // Cores da identidade visual do projeto, usadas em todos os gráficos.
+    var CORES = ["#E2582A", "#F2B705", "#2E6B3F", "#3B2A1E", "#D9381E", "#6B5F50"];
+
+    function carregarDashboard() {
+        fetch("/historias/dadosDashboard/" + sessionStorage.ID_USUARIO).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(function (dados) {
+                    preencherMetricas(dados);
+                    preencherDestaque(dados.destaque);
+                    desenharGraficos(dados);
+                });
+            } else {
+                resposta.text().then(function (texto) {
+                    alert(texto);
+                });
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        listarMinhasHistorias();
+    }
+
+    function preencherMetricas(dados) {
+        total_minhas.innerHTML = dados.totalMinhas;
+        total_site.innerHTML = dados.totalSite;
+        // Quem ainda não publicou nada não tem média: o banco devolve null.
+        impacto_medio.innerHTML = dados.impactoMedio == null ? "—" : dados.impactoMedio;
+    }
+
+    function preencherDestaque(destaque) {
+        if (destaque == undefined) {
+            dash_destaque.style.display = "none";
+            return;
+        }
+
+        destaque_musica.innerHTML = destaque.nome_musica;
+        destaque_info.innerHTML = destaque.artista + " &middot; impacto " + destaque.impacto + "/5";
+        destaque_botao.onclick = function () {
+            window.location = "../historia-detalhe.html?id=" + destaque.id;
+        };
+    }
+
+    function listarMinhasHistorias() {
+        fetch("/historias/listarPorUsuario/" + sessionStorage.ID_USUARIO).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(function (json) {
+
+                    if (json.length == 0) {
+                        lista_minhas_historias.innerHTML = `<div class="dash_linha">
+                                                                <div class="dash_linha_musica">Você ainda não publicou nenhuma história.</div>
+                                                            </div>`;
+                        return;
+                    }
+
+                    var htmlLinhas = "";
+
+                    // Na visão geral mostramos só as 5 mais recentes.
+                    for (var i = 0; i < json.length && i < 5; i++) {
+                        htmlLinhas += `<div class="dash_linha">
+                                        <div class="dash_linha_musica">${json[i].nome_musica} &mdash; ${json[i].artista}</div>
+                                       </div>`;
+                    }
+
+                    lista_minhas_historias.innerHTML = htmlLinhas;
+                });
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+    }
+
+    function desenharGraficos(dados) {
+        desenharFases(dados.porFase);
+        desenharImpacto(dados.impactoPorFase);
+        desenharGeneroPorFase(dados.porGeneroEFase);
+        desenharDecadas(dados.porDecada);
+    }
+
+    // Separa uma lista de objetos em dois arrays: um de rótulos e um de valores,
+    // que é o formato que o Chart.js espera.
+    function separarEmColunas(lista, campoRotulo, campoValor) {
+        var rotulos = [];
+        var valores = [];
+
+        for (var i = 0; i < lista.length; i++) {
+            rotulos.push(lista[i][campoRotulo]);
+            valores.push(lista[i][campoValor]);
+        }
+
+        return { rotulos: rotulos, valores: valores };
+    }
+
+    function desenharFases(porFase) {
+        var dados = separarEmColunas(porFase, "fase", "total");
+
+        new Chart(grafico_fases, {
+            type: "doughnut",
+            data: {
+                labels: dados.rotulos,
+                datasets: [{
+                    data: dados.valores,
+                    backgroundColor: CORES
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { position: "bottom" }
+                }
+            }
+        });
+    }
+
+    function desenharImpacto(impactoPorFase) {
+        var dados = separarEmColunas(impactoPorFase, "fase", "media");
+
+        new Chart(grafico_impacto, {
+            type: "bar",
+            data: {
+                labels: dados.rotulos,
+                datasets: [{
+                    label: "Impacto médio",
+                    data: dados.valores,
+                    backgroundColor: CORES[0]
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 5 }
+                }
+            }
+        });
+    }
+
+    function desenharDecadas(porDecada) {
+        var dados = separarEmColunas(porDecada, "decada", "total");
+
+        new Chart(grafico_decadas, {
+            type: "bar",
+            data: {
+                labels: dados.rotulos,
+                datasets: [{
+                    label: "Músicas",
+                    data: dados.valores,
+                    backgroundColor: CORES[2]
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                }
+            }
+        });
+    }
+
+    // Este é o mais trabalhoso: o banco devolve uma linha por combinação de
+    // gênero e fase, e o gráfico precisa de uma barra por gênero, dividida por fase.
+    function desenharGeneroPorFase(porGeneroEFase) {
+        var generos = [];
+        var fases = [];
+
+        for (var i = 0; i < porGeneroEFase.length; i++) {
+            if (generos.indexOf(porGeneroEFase[i].genero) == -1) {
+                generos.push(porGeneroEFase[i].genero);
+            }
+            if (fases.indexOf(porGeneroEFase[i].fase) == -1) {
+                fases.push(porGeneroEFase[i].fase);
+            }
+        }
+
+        // Para cada fase, um conjunto de barras com o total de cada gênero.
+        var conjuntos = [];
+
+        for (var f = 0; f < fases.length; f++) {
+            var valores = [];
+
+            for (var g = 0; g < generos.length; g++) {
+                var total = 0;
+
+                for (var i = 0; i < porGeneroEFase.length; i++) {
+                    if (porGeneroEFase[i].fase == fases[f] && porGeneroEFase[i].genero == generos[g]) {
+                        total = porGeneroEFase[i].total;
+                    }
+                }
+
+                valores.push(total);
+            }
+
+            conjuntos.push({
+                label: fases[f],
+                data: valores,
+                backgroundColor: CORES[f]
+            });
+        }
+
+        new Chart(grafico_genero_fase, {
+            type: "bar",
+            data: {
+                labels: generos,
+                datasets: conjuntos
+            },
+            options: {
+                plugins: { legend: { position: "bottom" } },
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } }
+                }
+            }
+        });
+    }
 
 </script>

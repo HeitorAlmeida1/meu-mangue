@@ -15,25 +15,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
-<body onload="listarHistorias()">
+<body onload="montarNavbar('historias'); listarHistorias()">
 
     <div class="header">
       <div class="container">
         <h1 class="titulo"><img class="logo-titulo" src="assets/caranguejo.svg" alt="logo caranguejo">MEU <span class="recorte">MANGUE</span></h1>
-        <ul class="navbar">
-          <li>
-            <a href="index.html">Home</a>
-          </li>
-          <li class="agora">
-            <a href="historias.html">Histórias</a>
-          </li>
-          <li>
-            <a href="login.html">Login</a>
-          </li>
-          <li>
-            <a href="cadastro.html">Cadastro</a>
-          </li>
-        </ul>
+        <ul class="navbar" id="navbar"></ul>
       </div>
     </div>
 
@@ -41,8 +28,13 @@
 
     <div class="pagina_historias">
         <div class="container">
-            <span class="eyebrow">// Arquivo</span>
-            <h2 class="titulo_historias">Histórias</h2>
+            <div class="historias_cabecalho">
+                <div>
+                    <span class="eyebrow">// Arquivo</span>
+                    <h2 class="titulo_historias">Histórias</h2>
+                </div>
+                <button class="botao_nova_historia" id="botao_nova_historia" onclick="window.location='nova-historia.html'">+ Nova história</button>
+            </div>
             <p class="epigrafe">“E eu quis me colocar num ônibus com direção ao futuro,<br> E eu pretendo passar o dia me observando atenta.”</p>
 
             <div class="filtros_historias">
@@ -63,9 +55,9 @@
           MEU <span class="recorte">MANGUE</span>
         </div>
         <div class="footer_contatos">
-          <a href="mailto:seuemail@email.com">seuemail@email.com</a>
-          <a href="https://instagram.com/seuusuario" target="_blank">Instagram</a>
-          <a href="https://github.com/seuusuario" target="_blank">GitHub</a>
+          <a href="mailto:meumangue@email.com">meumangue@email.com</a>
+          <a href="https://instagram.com/meumangue" target="_blank">Instagram</a>
+          <a href="https://github.com/heitoralmeida1" target="_blank">GitHub</a>
         </div>
         <div class="footer_texto">
           <h4>Projeto acadêmico sem fins lucrativos &middot; 2026/2</h4>
@@ -105,6 +97,13 @@
     }
 
     function listarHistorias(){
+
+        // O botão de publicar só faz sentido para quem está logado.
+        if (estaLogado()) {
+            botao_nova_historia.style.display = "block";
+        } else {
+            botao_nova_historia.style.display = "none";
+        }
 
         fetch("/historias/listarTodas").then(function (resposta) {
         if (resposta.ok) {

@@ -15,25 +15,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
-<body>
+<body onload="montarNavbar('nova-historia'); prepararFormulario()">
 
     <div class="header">
       <div class="container">
         <h1 class="titulo"><img class="logo-titulo" src="assets/caranguejo.svg" alt="logo caranguejo">MEU <span class="recorte">MANGUE</span></h1>
-        <ul class="navbar">
-          <li>
-            <a href="index.html">Home</a>
-          </li>
-          <li class="agora">
-            <a href="historias.html">Histórias</a>
-          </li>
-          <li>
-            <a href="login.html">Login</a>
-          </li>
-          <li>
-            <a href="cadastro.html">Cadastro</a>
-          </li>
-        </ul>
+        <ul class="navbar" id="navbar"></ul>
       </div>
     </div>
 
@@ -77,9 +64,27 @@
                         <span>Fase da vida</span>
                         <select id="fase_vida_input">
                             <option value="">Selecione uma fase</option>
-                            <option value="1">Infância</option>
-                            <option value="2">Adolescência</option>
-                            <option value="3">Hoje</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="campos_duas_colunas">
+                    <div class="campo">
+                        <span>Gênero musical</span>
+                        <select id="genero_input">
+                            <option value="">Selecione um gênero</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <span>Impacto (o quanto marcou você)</span>
+                        <select id="impacto_input">
+                            <option value="">Selecione o impacto</option>
+                            <option value="1">1 - Passou batido</option>
+                            <option value="2">2 - Gosto dela</option>
+                            <option value="3">3 - Marcou</option>
+                            <option value="4">4 - Marcou muito</option>
+                            <option value="5">5 - Mudou alguma coisa em mim</option>
                         </select>
                     </div>
                 </div>
@@ -106,9 +111,9 @@
           MEU <span class="recorte">MANGUE</span>
         </div>
         <div class="footer_contatos">
-          <a href="mailto:seuemail@email.com">seuemail@email.com</a>
-          <a href="https://instagram.com/seuusuario" target="_blank">Instagram</a>
-          <a href="https://github.com/seuusuario" target="_blank">GitHub</a>
+          <a href="mailto:meumangue@email.com">meumangue@email.com</a>
+          <a href="https://instagram.com/meumangue" target="_blank">Instagram</a>
+          <a href="https://github.com/heitoralmeida1" target="_blank">GitHub</a>
         </div>
         <div class="footer_texto">
           <h4>Projeto acadêmico sem fins lucrativos &middot; 2026/2</h4>
@@ -125,9 +130,72 @@
 
     var idHistoriaEditando = sessionStorage.ID_HISTORIA_EDITANDO;
 
-    if (idHistoriaEditando) {
-        titulo_formulario.innerHTML = "Editar história";
-        botao_publicar.innerHTML = "Salvar alterações";
+    // Prepara a tela: exige login, preenche os selects com o que vem do banco e,
+    // se for edição, carrega a história existente nos campos.
+    function prepararFormulario() {
+        if (!sessionStorage.ID_USUARIO) {
+            window.location = "login.html";
+            return;
+        }
+
+        if (idHistoriaEditando) {
+            titulo_formulario.innerHTML = "Editar história";
+            botao_publicar.innerHTML = "Salvar alterações";
+        }
+
+        // Os dois selects são carregados antes da história, porque as opções
+        // precisam existir para poderem ser marcadas como selecionadas depois.
+        var carregarFases = fetch("/fasesVida/listar").then(function (resposta) {
+            return resposta.json();
+        }).then(function (json) {
+            var opcoes = "<option value=''>Selecione uma fase</option>";
+            for (var i = 0; i < json.length; i++) {
+                opcoes += `<option value="${json[i].id}">${json[i].nome}</option>`;
+            }
+            fase_vida_input.innerHTML = opcoes;
+        });
+
+        var carregarGeneros = fetch("/generos/listar").then(function (resposta) {
+            return resposta.json();
+        }).then(function (json) {
+            var opcoes = "<option value=''>Selecione um gênero</option>";
+            for (var i = 0; i < json.length; i++) {
+                opcoes += `<option value="${json[i].id}">${json[i].nome}</option>`;
+            }
+            genero_input.innerHTML = opcoes;
+        });
+
+        if (idHistoriaEditando) {
+            Promise.all([carregarFases, carregarGeneros]).then(function () {
+                carregarHistoriaNoFormulario();
+            });
+        }
+    }
+
+    function carregarHistoriaNoFormulario() {
+        fetch("/historias/buscarPorId/" + idHistoriaEditando).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(function (json) {
+                    var historia = json[0];
+
+                    nome_musica_input.value = historia.nome_musica;
+                    artista_input.value = historia.artista;
+                    // O input de data só aceita o formato aaaa-mm-dd, por isso o corte.
+                    data_musica_input.value = historia.data_musica.slice(0, 10);
+                    trecho_input.value = historia.trecho;
+                    texto_completo_input.value = historia.texto_completo;
+                    impacto_input.value = historia.impacto;
+                    fase_vida_input.value = historia.fk_fase_vida;
+                    genero_input.value = historia.fk_genero;
+                });
+            } else {
+                resposta.text().then(function (texto) {
+                    alert(texto);
+                });
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        })
     }
 
     function salvarHistoria() {
@@ -137,18 +205,30 @@
             artistaServer: artista_input.value,
             dataMusicaServer: data_musica_input.value,
             fkFaseVidaServer: fase_vida_input.value,
+            fkGeneroServer: genero_input.value,
+            impactoServer: impacto_input.value,
             trechoServer: trecho_input.value,
             textoCompletoServer: texto_completo_input.value,
             fkUsuarioServer: sessionStorage.ID_USUARIO
         };
 
-        if (historia.nomeMusicaServer == "" || historia.artistaServer == "" || historia.dataMusicaServer == "" || historia.fkFaseVidaServer == "" || historia.trechoServer == "" || historia.textoCompletoServer == "" || historia.fkUsuarioServer == "") {
-            alert('Mensagem de erro para todos os campos em branco');
+        if (historia.nomeMusicaServer == "" || historia.artistaServer == "" || historia.dataMusicaServer == "" || historia.fkFaseVidaServer == "" || historia.fkGeneroServer == "" || historia.impactoServer == "" || historia.trechoServer == "" || historia.textoCompletoServer == "" || historia.fkUsuarioServer == "") {
+            alert('Preencha todos os campos antes de publicar.');
             return false;
         }
 
-        fetch("/historias/salvarHistoria", {
-            method: "POST",
+        // Mesma tela serve para criar e para editar: o que muda é o endereço
+        // chamado e o verbo HTTP.
+        var url = "/historias/salvarHistoria";
+        var metodo = "POST";
+
+        if (idHistoriaEditando) {
+            url = "/historias/atualizar/" + idHistoriaEditando;
+            metodo = "PUT";
+        }
+
+        fetch(url, {
+            method: metodo,
             headers: {
                 "Content-Type": "application/json"
             },
@@ -161,7 +241,10 @@
 
                 resposta.json().then(json => {
                     console.log(json);
-                    console.log(JSON.stringify(json));
+                    // Sem isso, abrir "Nova história" depois de editar continuaria
+                    // em modo de edição.
+                    sessionStorage.removeItem("ID_HISTORIA_EDITANDO");
+
                     setTimeout(function () {
                         window.location = "./historias.html";
                     }, 1000); // apenas para exibir o loading

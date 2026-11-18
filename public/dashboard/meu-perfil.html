@@ -16,22 +16,12 @@
     <script src="../js/sessao.js"></script>
 </head>
 
-<body onload="validarSessao()">
+<body onload="montarNavbar('dashboard'); validarSessao(); carregarPerfil()">
 
     <div class="header">
       <div class="container">
         <h1 class="titulo"><img class="logo-titulo" src="../assets/caranguejo.svg" alt="logo caranguejo">MEU <span class="recorte">MANGUE</span></h1>
-        <ul class="navbar">
-          <li>
-            <a href="../index.html">Home</a>
-          </li>
-          <li>
-            <a href="../historias.html">Histórias</a>
-          </li>
-          <li class="agora">
-            <a href="dashboard.html">Dashboard</a>
-          </li>
-        </ul>
+        <ul class="navbar" id="navbar"></ul>
       </div>
     </div>
 
@@ -80,15 +70,72 @@
 
 <script>
 
-    nome_input.value = sessionStorage.NOME_USUARIO;
-    email_input.value = sessionStorage.EMAIL_USUARIO;
+    function carregarPerfil() {
+        nome_input.value = sessionStorage.NOME_USUARIO;
+        email_input.value = sessionStorage.EMAIL_USUARIO;
+    }
 
     function salvarPerfil() {
-        console.log("Salvar perfil:", nome_input.value, email_input.value);
+        var perfil = {
+            nomeServer: nome_input.value,
+            emailServer: email_input.value,
+            // Campo em branco significa "manter a senha atual" — o back-end trata isso.
+            senhaServer: senha_input.value
+        };
+
+        if (perfil.nomeServer == "" || perfil.emailServer == "") {
+            alert("Preencha nome e e-mail.");
+            return false;
+        }
+
+        fetch("/usuarios/atualizar/" + sessionStorage.ID_USUARIO, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(perfil)
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                // A sessão guarda nome e e-mail, então precisa acompanhar a mudança.
+                sessionStorage.NOME_USUARIO = perfil.nomeServer;
+                sessionStorage.EMAIL_USUARIO = perfil.emailServer;
+                senha_input.value = "";
+
+                montarNavbar('dashboard');
+                validarSessao();
+
+                alert("Perfil atualizado!");
+            } else {
+                resposta.text().then(function (texto) {
+                    alert(texto);
+                });
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
     }
 
     function apagarConta() {
-        console.log("Apagar conta do usuário de id:", sessionStorage.ID_USUARIO);
+        if (!confirm("Isso apaga sua conta e TODAS as suas histórias. Não dá para desfazer. Tem certeza?")) {
+            return;
+        }
+
+        fetch("/usuarios/apagar/" + sessionStorage.ID_USUARIO, {
+            method: "DELETE"
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                alert("Sua conta foi apagada.");
+                limparSessao();
+            } else {
+                resposta.text().then(function (texto) {
+                    alert(texto);
+                });
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        })
     }
 
 </script>

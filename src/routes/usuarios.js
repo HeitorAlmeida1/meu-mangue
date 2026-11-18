@@ -12,4 +12,12 @@ router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
 });
 
+router.put("/atualizar/:idUsuario", function (req, res) {
+    usuarioController.atualizar(req, res);
+});
+
+router.delete("/apagar/:idUsuario", function (req, res) {
+    usuarioController.apagar(req, res);
+});
+
 module.exports = router;

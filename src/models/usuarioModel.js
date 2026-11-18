@@ -22,7 +22,43 @@ function cadastrar(nome, email, senha) {
     return database.executar(instrucaoSql);
 }
 
+function atualizar(idUsuario, nome, email, senha) {
+
+    // Quando o usuário deixa o campo de senha em branco, a senha atual é mantida.
+    var instrucaoSql = "";
+
+    if (senha == "") {
+        instrucaoSql = `UPDATE usuario SET nome = '${nome}', email = '${email}' WHERE id = '${idUsuario}'`;
+    } else {
+        instrucaoSql = `UPDATE usuario SET nome = '${nome}', email = '${email}', senha = '${senha}' WHERE id = '${idUsuario}'`;
+    }
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+// As histórias precisam sair antes do usuário: a chave estrangeira
+// fk_usuario impede apagar alguém que ainda tenha histórias no banco.
+function apagarHistoriasDoUsuario(idUsuario) {
+
+    var instrucaoSql = `DELETE FROM historia WHERE fk_usuario = '${idUsuario}'`;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function apagar(idUsuario) {
+
+    var instrucaoSql = `DELETE FROM usuario WHERE id = '${idUsuario}'`;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    atualizar,
+    apagarHistoriasDoUsuario,
+    apagar
 };
