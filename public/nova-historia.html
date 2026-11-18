@@ -33,8 +33,8 @@
                 <h2 id="titulo_formulario">Nova história</h2>
                 <p>Escolha a música, diga em que fase da vida ela entrou e conte o que ela representa.</p>
                 <ol>
-                    <li><span>01</span> A música</li>
-                    <li><span>02</span> A fase da vida</li>
+                    <li><span>01</span> A música e o artista</li>
+                    <li><span>02</span> A fase, o gênero e o impacto</li>
                     <li><span>03</span> A história</li>
                 </ol>
             </div>
@@ -217,8 +217,6 @@
             return false;
         }
 
-        // Mesma tela serve para criar e para editar: o que muda é o endereço
-        // chamado e o verbo HTTP.
         var url = "/historias/salvarHistoria";
         var metodo = "POST";
 
@@ -234,27 +232,17 @@
             },
             body: JSON.stringify( historia )
         }).then(function (resposta) {
-            console.log("ESTOU NO THEN DO salvarHistoria()!")
 
             if (resposta.ok) {
-                console.log(resposta);
-
-                resposta.json().then(json => {
-                    console.log(json);
+                resposta.json().then(function () {
                     // Sem isso, abrir "Nova história" depois de editar continuaria
-                    // em modo de edição.
+                    // em modo de edição e sobrescreveria a história anterior.
                     sessionStorage.removeItem("ID_HISTORIA_EDITANDO");
 
-                    setTimeout(function () {
-                        window.location = "./historias.html";
-                    }, 1000); // apenas para exibir o loading
-
+                    window.location = "./historias.html";
                 });
 
             } else {
-
-                console.log("Houve um erro ao tentar cadastrar esta história");
-
                 resposta.text().then(texto => {
                     alert(texto);
                 });

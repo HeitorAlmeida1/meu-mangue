@@ -107,28 +107,24 @@
   function cadastrar() {
     aguardar();
 
-    //Recupere o valor da nova input pelo nome do id
-    // Agora vá para o método fetch logo abaixo
     var nomeVar = nome_input.value;
     var emailVar = email_input.value;
     var senhaVar = senha_input.value;
     var confirmacaoSenhaVar = confirmacao_senha_input.value;
 
-    // Verificando se há algum campo em branco
-    if (
-      nomeVar == "" ||
-      emailVar == "" ||
-      senhaVar == "" ||
-      confirmacaoSenhaVar == "" ||
-      senhaVar != confirmacaoSenhaVar
-    ) {
+    if (nomeVar == "" || emailVar == "" || senhaVar == "" || confirmacaoSenhaVar == "") {
+      cardErro.classList.remove("sucesso");
       cardErro.style.display = "block";
-      mensagem_erro.innerHTML =
-        "(Mensagem de erro para todos os campos em branco)";
+      mensagem_erro.innerHTML = "Preencha todos os campos.";
 
       finalizarAguardar();
-
+      return false;
+    } else if (senhaVar != confirmacaoSenhaVar) {
       cardErro.classList.remove("sucesso");
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "As senhas não coincidem.";
+
+      finalizarAguardar();
       return false;
     } else {
       setInterval(sumirMensagem, 5000);
@@ -141,41 +137,35 @@
         var caractereAtual = senhaVar[i];
 
         if (caractereAtual >= '0' && caractereAtual <= '9') {
-        temNumero = true;
+          temNumero = true;
         }
 
         if (caractereAtual >= 'A' && caractereAtual <= 'Z') {
-        temMaiuscula = true;
+          temMaiuscula = true;
         }
       }
 
       if (senhaVar.length < 8 || !temNumero || !temMaiuscula) {
-          cardErro.style.display = "block";
-          mensagem_erro.innerHTML = "Sua senha necessita ter pelo menos 8 digítos, 1 caracter maiuscúlo e 1 número.";
-
           cardErro.classList.remove("sucesso");
+          cardErro.style.display = "block";
+          mensagem_erro.innerHTML = "A senha precisa ter ao menos 8 caracteres, 1 número e 1 letra maiúscula.";
 
           finalizarAguardar();
           return false;
       }
 
-    // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // crie um atributo que recebe o valor recuperado aqui
-        // Agora vá para o arquivo routes/usuario.js
         nomeServer: nomeVar,
         emailServer: emailVar,
         senhaServer: senhaVar
       }),
     })
       .then(function (resposta) {
-        console.log("resposta: ", resposta);
-
         if (resposta.ok) {
           cardErro.style.display = "block";
 

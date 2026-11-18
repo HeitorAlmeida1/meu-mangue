@@ -1,14 +1,18 @@
--- Arquivo de apoio, caso você queira criar tabelas como as aqui criadas para a API funcionar.
--- Você precisa executar os comandos no banco de dados para criar as tabelas,
--- ter este arquivo aqui não significa que a tabela em seu BD estará como abaixo!
-
-/*
-comandos para mysql server
-*/
+-- ============================================================
+-- Meu Mangue - script de criação do banco
+--
+-- Execute este arquivo em um usuário com permissão de criação
+-- (root, por exemplo). O usuário usado pela aplicação precisa
+-- apenas de SELECT, INSERT, UPDATE e DELETE neste banco.
+-- ============================================================
 
 CREATE DATABASE meu_mangue;
 
 USE meu_mangue;
+
+-- ------------------------------------------------------------
+-- Tabelas
+-- ------------------------------------------------------------
 
 CREATE TABLE usuario (
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -46,10 +50,14 @@ CREATE TABLE historia (
 	FOREIGN KEY (fk_usuario) REFERENCES usuario(id)
 ) AUTO_INCREMENT = 1;
 
-INSERT INTO fase_vida VALUES
-(DEFAULT, 'Infância', 'Músicas que marcaram a infância'),
-(DEFAULT, 'Adolescência', 'Músicas que marcaram a adolescência'),
-(DEFAULT, 'Hoje', 'Músicas que marcam o momento atual');
+-- ------------------------------------------------------------
+-- Dados fixos (necessários para a aplicação funcionar)
+-- ------------------------------------------------------------
+
+INSERT INTO fase_vida (nome, descricao) VALUES
+('Infância', 'Músicas que marcaram a infância'),
+('Adolescência', 'Músicas que marcaram a adolescência'),
+('Hoje', 'Músicas que marcam o momento atual');
 
 INSERT INTO genero (nome) VALUES
 ('Manguebeat'), ('MPB'), ('Rock'), ('Pop'), ('Axé'),
@@ -57,3 +65,47 @@ INSERT INTO genero (nome) VALUES
 ('R&B'), ('Funk'), ('Reggae'), ('Indie'), ('Eletrônica'),
 ('Jazz'), ('Blues'), ('Soul'), ('Infantil'), ('Gospel'),
 ('Bossa Nova'), ('Punk'), ('Metal'), ('Clássica');
+
+-- ------------------------------------------------------------
+-- Consultas usadas pela aplicação (referência)
+-- ------------------------------------------------------------
+
+-- Listagem de histórias (telas de histórias e home)
+SELECT h.id, h.nome_musica, h.artista, h.data_musica, h.trecho, h.impacto,
+       f.nome AS fase, g.nome AS genero, u.nome AS autor
+FROM historia h
+JOIN fase_vida f ON h.fk_fase_vida = f.id
+JOIN genero g ON h.fk_genero = g.id
+JOIN usuario u ON h.fk_usuario = u.id
+ORDER BY h.data_publicacao DESC;
+
+-- Dashboard: histórias por fase da vida
+SELECT f.nome AS fase, COUNT(h.id) AS total
+FROM fase_vida f
+LEFT JOIN historia h ON h.fk_fase_vida = f.id AND h.fk_usuario = 1
+GROUP BY f.id, f.nome
+ORDER BY f.id;
+
+-- Dashboard: gêneros por fase da vida
+SELECT g.nome AS genero, f.nome AS fase, COUNT(h.id) AS total
+FROM historia h
+JOIN genero g ON h.fk_genero = g.id
+JOIN fase_vida f ON h.fk_fase_vida = f.id
+WHERE h.fk_usuario = 1
+GROUP BY g.nome, f.nome, f.id
+ORDER BY f.id, total DESC;
+
+-- Dashboard: músicas por década
+SELECT CONCAT(FLOOR(YEAR(data_musica) / 10) * 10, 's') AS decada, COUNT(id) AS total
+FROM historia
+WHERE fk_usuario = 1
+GROUP BY decada
+ORDER BY decada;
+
+-- Dashboard: impacto médio por fase da vida
+SELECT f.nome AS fase, ROUND(AVG(h.impacto), 1) AS media
+FROM historia h
+JOIN fase_vida f ON h.fk_fase_vida = f.id
+WHERE h.fk_usuario = 1
+GROUP BY f.id, f.nome
+ORDER BY f.id;

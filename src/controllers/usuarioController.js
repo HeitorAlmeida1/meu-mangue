@@ -1,61 +1,66 @@
 var usuarioModel = require("../models/usuarioModel");
 
+var ERRO_PADRAO = "Não foi possível completar a operação. Tente novamente.";
+var ERRO_EMAIL_EM_USO = "Este e-mail já está cadastrado.";
+
+function estaVazio(valor) {
+    return valor == undefined || valor.toString().trim() == "";
+}
+
+function responderErro(res, erro, contexto) {
+    console.log("\n" + contexto + " Erro: ", erro.sqlMessage || erro);
+
+    if (erro.code == "ER_DUP_ENTRY") {
+        res.status(400).send(ERRO_EMAIL_EM_USO);
+    } else {
+        res.status(500).send(ERRO_PADRAO);
+    }
+}
+
 function autenticar(req, res) {
     var email = req.body.emailServer;
     var senha = req.body.senhaServer;
 
-    if (email == undefined) {
-        res.status(400).send("Seu email está undefined!");
-    } else if (senha == undefined) {
-        res.status(400).send("Sua senha está indefinida!");
+    if (estaVazio(email)) {
+        res.status(400).send("Informe o seu e-mail.");
+    } else if (estaVazio(senha)) {
+        res.status(400).send("Informe a sua senha.");
     } else {
-
         usuarioModel.autenticar(email, senha)
             .then(
                 function (resultadoAutenticar) {
-                    console.log(`\nResultados encontrados: ${resultadoAutenticar.length}`);
-                    console.log(`Resultados: ${JSON.stringify(resultadoAutenticar)}`); // transforma JSON em String
-
                     if (resultadoAutenticar.length == 1) {
-                        console.log(resultadoAutenticar);
                         res.json({
                             id: resultadoAutenticar[0].id,
                             email: resultadoAutenticar[0].email,
                             nome: resultadoAutenticar[0].nome
                         });
                     } else if (resultadoAutenticar.length == 0) {
-                        res.status(403).send("Email e/ou senha inválido(s)");
+                        res.status(403).send("E-mail e/ou senha inválidos.");
                     } else {
                         res.status(403).send("Mais de um usuário com o mesmo login e senha!");
                     }
                 }
             ).catch(
                 function (erro) {
-                    console.log(erro);
-                    console.log("\nHouve um erro ao realizar o login! Erro: ", erro.sqlMessage);
-                    res.status(500).json(erro.sqlMessage);
+                    responderErro(res, erro, "Houve um erro ao realizar o login!");
                 }
             );
     }
-
 }
 
 function cadastrar(req, res) {
-    // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
     var nome = req.body.nomeServer;
     var email = req.body.emailServer;
     var senha = req.body.senhaServer;
 
-    // Faça as validações dos valores
-    if (nome == undefined) {
-        res.status(400).send("Seu nome está undefined!");
-    } else if (email == undefined) {
-        res.status(400).send("Seu email está undefined!");
-    } else if (senha == undefined) {
-        res.status(400).send("Sua senha está undefined!");
+    if (estaVazio(nome)) {
+        res.status(400).send("Informe o seu nome.");
+    } else if (estaVazio(email)) {
+        res.status(400).send("Informe o seu e-mail.");
+    } else if (estaVazio(senha)) {
+        res.status(400).send("Informe a sua senha.");
     } else {
-
-        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
         usuarioModel.cadastrar(nome, email, senha)
             .then(
                 function (resultado) {
@@ -63,12 +68,7 @@ function cadastrar(req, res) {
                 }
             ).catch(
                 function (erro) {
-                    console.log(erro);
-                    console.log(
-                        "\nHouve um erro ao realizar o cadastro! Erro: ",
-                        erro.sqlMessage
-                    );
-                    res.status(500).json(erro.sqlMessage);
+                    responderErro(res, erro, "Houve um erro ao realizar o cadastro!");
                 }
             );
     }
@@ -80,16 +80,15 @@ function atualizar(req, res) {
     var email = req.body.emailServer;
     var senha = req.body.senhaServer;
 
-    if (idUsuario == undefined) {
-        res.status(400).send("O id do usuário está undefined!");
-    } else if (nome == undefined || nome == "") {
-        res.status(400).send("Seu nome está vazio!");
-    } else if (email == undefined || email == "") {
-        res.status(400).send("Seu email está vazio!");
+    if (estaVazio(idUsuario)) {
+        res.status(400).send("Informe o usuário que deseja atualizar.");
+    } else if (estaVazio(nome)) {
+        res.status(400).send("Informe o seu nome.");
+    } else if (estaVazio(email)) {
+        res.status(400).send("Informe o seu e-mail.");
     } else if (senha == undefined) {
-        res.status(400).send("Sua senha está undefined!");
+        res.status(400).send("Informe a sua senha.");
     } else {
-
         usuarioModel.atualizar(idUsuario, nome, email, senha)
             .then(
                 function (resultado) {
@@ -97,12 +96,7 @@ function atualizar(req, res) {
                 }
             ).catch(
                 function (erro) {
-                    console.log(erro);
-                    console.log(
-                        "\nHouve um erro ao atualizar o perfil! Erro: ",
-                        erro.sqlMessage
-                    );
-                    res.status(500).json(erro.sqlMessage);
+                    responderErro(res, erro, "Houve um erro ao atualizar o perfil!");
                 }
             );
     }
@@ -111,12 +105,11 @@ function atualizar(req, res) {
 function apagar(req, res) {
     var idUsuario = req.params.idUsuario;
 
-    if (idUsuario == undefined) {
-        res.status(400).send("O id do usuário está undefined!");
+    if (estaVazio(idUsuario)) {
+        res.status(400).send("Informe o usuário que deseja apagar.");
     } else {
-
-        // Primeiro as histórias, depois o usuário — a ordem inversa seria
-        // recusada pelo banco por causa da chave estrangeira.
+        // As histórias precisam sair antes do usuário: a chave estrangeira
+        // fk_usuario impede apagar alguém que ainda tenha histórias no banco.
         usuarioModel.apagarHistoriasDoUsuario(idUsuario)
             .then(
                 function () {
@@ -128,12 +121,7 @@ function apagar(req, res) {
                 }
             ).catch(
                 function (erro) {
-                    console.log(erro);
-                    console.log(
-                        "\nHouve um erro ao apagar a conta! Erro: ",
-                        erro.sqlMessage
-                    );
-                    res.status(500).json(erro.sqlMessage);
+                    responderErro(res, erro, "Houve um erro ao apagar a conta!");
                 }
             );
     }
