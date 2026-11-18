@@ -59,10 +59,9 @@ DOCUMENTOS_DE_APOIO/  entregáveis do projeto e registro de uso de IA como apoio
 
 ## Sobre o uso de IA neste projeto
 
-Usei o Claude Code como apoio de aprendizado ao longo do desenvolvimento, sempre
+Usei o Claude Code / OpenCode como apoio de aprendizado ao longo do desenvolvimento, sempre
 no papel de orientador: pedindo pra ele me explicar conceitos e apontar erros,
-mas escrevendo o código eu mesmo. O registro dessas conversas está em
-`DOCUMENTOS_DE_APOIO/REGISTRO_USO_IA.md`.
+mas escrevendo o código eu mesmo.
 
 ## Créditos
 
