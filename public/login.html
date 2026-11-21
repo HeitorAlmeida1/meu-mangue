@@ -126,7 +126,7 @@
         }).then(function (resposta) {
 
             if (resposta.ok) {
-                resposta.json().then(json => {
+                resposta.json().then(function (json) {
                     sessionStorage.EMAIL_USUARIO = json.email;
                     sessionStorage.NOME_USUARIO = json.nome;
                     sessionStorage.ID_USUARIO = json.id;
@@ -137,7 +137,7 @@
                 });
 
             } else {
-                resposta.text().then(texto => {
+                resposta.text().then(function (texto) {
                     finalizarAguardar(texto);
                 });
             }

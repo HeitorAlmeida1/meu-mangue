@@ -103,7 +103,12 @@
     function preencherMetricas(dados) {
         total_minhas.innerHTML = dados.totalMinhas;
         total_site.innerHTML = dados.totalSite;
-        impacto_medio.innerHTML = dados.impactoMedio == null ? "—" : dados.impactoMedio;
+        // Quem ainda não publicou nada não tem média: o banco devolve null.
+        if (dados.impactoMedio == null) {
+            impacto_medio.innerHTML = "—";
+        } else {
+            impacto_medio.innerHTML = dados.impactoMedio;
+        }
     }
     function preencherDestaque(destaque) {
         if (destaque == undefined) {

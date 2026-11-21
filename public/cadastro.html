@@ -174,13 +174,13 @@
           mensagem_erro.innerHTML =
             "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
 
-          setTimeout(() => {
+          setTimeout(function () {
             window.location = "login.html";
           }, "2000");
 
           finalizarAguardar();
         } else {
-          resposta.text().then(texto => {
+          resposta.text().then(function (texto) {
                   finalizarAguardar(texto);
           });
         }

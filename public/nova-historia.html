@@ -143,9 +143,9 @@
             botao_publicar.innerHTML = "Salvar alterações";
         }
 
-        // Os dois selects são carregados antes da história, porque as opções
-        // precisam existir para poderem ser marcadas como selecionadas depois.
-        var carregarFases = fetch("/fasesVida/listar").then(function (resposta) {
+        // Carrega um select de cada vez, e só no fim busca a história:
+        // as opções precisam existir antes de serem marcadas como selecionadas.
+        fetch("/fasesVida/listar").then(function (resposta) {
             return resposta.json();
         }).then(function (json) {
             var opcoes = "<option value=''>Selecione uma fase</option>";
@@ -153,9 +153,9 @@
                 opcoes += `<option value="${json[i].id}">${json[i].nome}</option>`;
             }
             fase_vida_input.innerHTML = opcoes;
-        });
 
-        var carregarGeneros = fetch("/generos/listar").then(function (resposta) {
+            return fetch("/generos/listar");
+        }).then(function (resposta) {
             return resposta.json();
         }).then(function (json) {
             var opcoes = "<option value=''>Selecione um gênero</option>";
@@ -163,13 +163,13 @@
                 opcoes += `<option value="${json[i].id}">${json[i].nome}</option>`;
             }
             genero_input.innerHTML = opcoes;
-        });
 
-        if (idHistoriaEditando) {
-            Promise.all([carregarFases, carregarGeneros]).then(function () {
+            if (idHistoriaEditando) {
                 carregarHistoriaNoFormulario();
-            });
-        }
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        })
     }
 
     function carregarHistoriaNoFormulario() {
@@ -243,7 +243,7 @@
                 });
 
             } else {
-                resposta.text().then(texto => {
+                resposta.text().then(function (texto) {
                     alert(texto);
                 });
             }

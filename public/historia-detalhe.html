@@ -94,7 +94,8 @@
 
 <script>
 
-    var idHistoria = new URLSearchParams(window.location.search).get("id");
+    // A URL chega como "?id=3", então separamos no "=" e pegamos o que vem depois.
+    var idHistoria = window.location.search.split("=")[1];
 
     function carregarHistoria() {
         fetch("/historias/buscarPorId/" + idHistoria).then(function (resposta) {

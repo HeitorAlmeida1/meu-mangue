@@ -173,42 +173,53 @@ function atualizar(req, res) {
 }
 
 // Junta num só JSON tudo que a dashboard precisa, para a tela não ter
-// que fazer oito requisições separadas.
+// que fazer oito requisições separadas. Cada consulta é feita na sequência
+// e vai guardando o resultado no objeto dados.
 function dadosDashboard(req, res) {
     var idUsuario = req.params.idUsuario;
 
     if (idUsuario == undefined) {
         res.status(400).send("O id do usuário está undefined!");
     } else {
-        Promise.all([
-            historiaModel.contarPorUsuario(idUsuario),
-            historiaModel.contarTodas(),
-            historiaModel.impactoMedioPorUsuario(idUsuario),
-            historiaModel.destaquePorUsuario(idUsuario),
-            historiaModel.contarPorFase(idUsuario),
-            historiaModel.contarPorGeneroEFase(idUsuario),
-            historiaModel.contarPorDecada(idUsuario),
-            historiaModel.impactoMedioPorFase(idUsuario)
-        ]).then(
-            function (resultados) {
-                res.json({
-                    totalMinhas: resultados[0][0].total,
-                    totalSite: resultados[1][0].total,
-                    impactoMedio: resultados[2][0].media,
-                    destaque: resultados[3][0],
-                    porFase: resultados[4],
-                    porGeneroEFase: resultados[5],
-                    porDecada: resultados[6],
-                    impactoPorFase: resultados[7]
-                });
-            }
-        ).catch(
-            function (erro) {
-                console.log(erro);
-                console.log("Houve um erro ao buscar os dados da dashboard: ", erro.sqlMessage);
-                res.status(500).json(erro.sqlMessage);
-            }
-        );
+        var dados = {};
+
+        historiaModel.contarPorUsuario(idUsuario).then(function (resultado) {
+            dados.totalMinhas = resultado[0].total;
+            return historiaModel.contarTodas();
+
+        }).then(function (resultado) {
+            dados.totalSite = resultado[0].total;
+            return historiaModel.impactoMedioPorUsuario(idUsuario);
+
+        }).then(function (resultado) {
+            dados.impactoMedio = resultado[0].media;
+            return historiaModel.destaquePorUsuario(idUsuario);
+
+        }).then(function (resultado) {
+            dados.destaque = resultado[0];
+            return historiaModel.contarPorFase(idUsuario);
+
+        }).then(function (resultado) {
+            dados.porFase = resultado;
+            return historiaModel.contarPorGeneroEFase(idUsuario);
+
+        }).then(function (resultado) {
+            dados.porGeneroEFase = resultado;
+            return historiaModel.contarPorDecada(idUsuario);
+
+        }).then(function (resultado) {
+            dados.porDecada = resultado;
+            return historiaModel.impactoMedioPorFase(idUsuario);
+
+        }).then(function (resultado) {
+            dados.impactoPorFase = resultado;
+            res.json(dados);
+
+        }).catch(function (erro) {
+            console.log(erro);
+            console.log("Houve um erro ao buscar os dados da dashboard: ", erro.sqlMessage);
+            res.status(500).json(erro.sqlMessage);
+        });
     }
 }
 
