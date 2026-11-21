@@ -8,8 +8,9 @@ function listar(req, res) {
             }
         ).catch(
             function (erro) {
-                console.log("\nHouve um erro ao listar os gêneros! Erro: ", erro.sqlMessage || erro);
-                res.status(500).send("Não foi possível carregar os gêneros.");
+                console.log(erro);
+                console.log("Houve um erro ao listar os gêneros: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
             }
         );
 }

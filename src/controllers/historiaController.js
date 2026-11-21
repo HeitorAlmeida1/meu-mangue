@@ -1,76 +1,47 @@
 var historiaModel = require("../models/historiaModel");
 
-var ERRO_PADRAO = "Não foi possível completar a operação. Tente novamente.";
-
-function estaVazio(valor) {
-    return valor == undefined || valor.toString().trim() == "";
-}
-
-function validarHistoria(dados) {
-    if (estaVazio(dados.nomeMusica)) {
-        return "Informe o nome da música.";
-    }
-    if (estaVazio(dados.artista)) {
-        return "Informe o nome do artista.";
-    }
-    if (estaVazio(dados.dataMusica)) {
-        return "Informe a data da música.";
-    }
-    if (estaVazio(dados.trecho)) {
-        return "Informe o trecho que aparece nos cards.";
-    }
-    if (estaVazio(dados.textoCompleto)) {
-        return "Informe o texto completo da história.";
-    }
-    if (estaVazio(dados.fkFaseVida)) {
-        return "Selecione a fase da vida.";
-    }
-    if (estaVazio(dados.fkGenero)) {
-        return "Selecione o gênero musical.";
-    }
-    if (estaVazio(dados.impacto) || isNaN(Number(dados.impacto)) || Number(dados.impacto) < 1 || Number(dados.impacto) > 5) {
-        return "O impacto precisa ser um valor de 1 a 5.";
-    }
-
-    return null;
-}
-
-function lerHistoriaDoBody(req) {
-    return {
-        nomeMusica: req.body.nomeMusicaServer,
-        artista: req.body.artistaServer,
-        dataMusica: req.body.dataMusicaServer,
-        trecho: req.body.trechoServer,
-        textoCompleto: req.body.textoCompletoServer,
-        impacto: req.body.impactoServer,
-        fkFaseVida: req.body.fkFaseVidaServer,
-        fkGenero: req.body.fkGeneroServer,
-        fkUsuario: req.body.fkUsuarioServer
-    };
-}
-
-function responderErro(res, erro, contexto) {
-    console.log("\n" + contexto + " Erro: ", erro.sqlMessage || erro);
-    res.status(500).send(ERRO_PADRAO);
-}
-
 function salvarHistoria(req, res) {
-    var dados = lerHistoriaDoBody(req);
-    var erroValidacao = validarHistoria(dados);
+    var nomeMusica = req.body.nomeMusicaServer;
+    var artista = req.body.artistaServer;
+    var dataMusica = req.body.dataMusicaServer;
+    var trecho = req.body.trechoServer;
+    var textoCompleto = req.body.textoCompletoServer;
+    var impacto = req.body.impactoServer;
+    var fkFaseVida = req.body.fkFaseVidaServer;
+    var fkGenero = req.body.fkGeneroServer;
+    var fkUsuario = req.body.fkUsuarioServer;
 
-    if (erroValidacao != null) {
-        res.status(400).send(erroValidacao);
-    } else if (estaVazio(dados.fkUsuario)) {
-        res.status(400).send("Você precisa estar logado para publicar uma história.");
+    if (nomeMusica == undefined || nomeMusica == "") {
+        res.status(400).send("O nome da música está undefined!");
+    } else if (artista == undefined || artista == "") {
+        res.status(400).send("O artista está undefined!");
+    } else if (dataMusica == undefined || dataMusica == "") {
+        res.status(400).send("A data da música está undefined!");
+    } else if (trecho == undefined || trecho == "") {
+        res.status(400).send("O trecho está undefined!");
+    } else if (textoCompleto == undefined || textoCompleto == "") {
+        res.status(400).send("O texto completo está undefined!");
+    } else if (impacto == undefined || impacto == "") {
+        res.status(400).send("O impacto está undefined!");
+    } else if (impacto < 1 || impacto > 5) {
+        res.status(400).send("O impacto precisa ser um valor de 1 a 5!");
+    } else if (fkFaseVida == undefined || fkFaseVida == "") {
+        res.status(400).send("A fase da vida está undefined!");
+    } else if (fkGenero == undefined || fkGenero == "") {
+        res.status(400).send("O gênero musical está undefined!");
+    } else if (fkUsuario == undefined || fkUsuario == "") {
+        res.status(400).send("O usuário está undefined!");
     } else {
-        historiaModel.salvarHistoria(dados.nomeMusica, dados.artista, dados.dataMusica, dados.trecho, dados.textoCompleto, dados.impacto, dados.fkFaseVida, dados.fkGenero, dados.fkUsuario)
+        historiaModel.salvarHistoria(nomeMusica, artista, dataMusica, trecho, textoCompleto, impacto, fkFaseVida, fkGenero, fkUsuario)
             .then(
                 function (resultado) {
                     res.json(resultado);
                 }
             ).catch(
                 function (erro) {
-                    responderErro(res, erro, "Houve um erro ao cadastrar a história!");
+                    console.log(erro);
+                    console.log("Houve um erro ao cadastrar a história: ", erro.sqlMessage);
+                    res.status(500).json(erro.sqlMessage);
                 }
             );
     }
@@ -84,7 +55,9 @@ function listarTodas(req, res) {
             }
         ).catch(
             function (erro) {
-                responderErro(res, erro, "Houve um erro ao listar as histórias!");
+                console.log(erro);
+                console.log("Houve um erro ao listar as histórias: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
             }
         );
 }
@@ -92,8 +65,8 @@ function listarTodas(req, res) {
 function listarPorUsuario(req, res) {
     var idUsuario = req.params.idUsuario;
 
-    if (estaVazio(idUsuario)) {
-        res.status(400).send("Informe o usuário das histórias.");
+    if (idUsuario == undefined) {
+        res.status(400).send("O id do usuário está undefined!");
     } else {
         historiaModel.listarPorUsuario(idUsuario)
             .then(
@@ -102,7 +75,9 @@ function listarPorUsuario(req, res) {
                 }
             ).catch(
                 function (erro) {
-                    responderErro(res, erro, "Houve um erro ao listar as histórias do usuário!");
+                    console.log(erro);
+                    console.log("Houve um erro ao listar as histórias do usuário: ", erro.sqlMessage);
+                    res.status(500).json(erro.sqlMessage);
                 }
             );
     }
@@ -111,8 +86,8 @@ function listarPorUsuario(req, res) {
 function buscarPorId(req, res) {
     var idHistoria = req.params.idHistoria;
 
-    if (estaVazio(idHistoria)) {
-        res.status(400).send("Informe a história que deseja buscar.");
+    if (idHistoria == undefined) {
+        res.status(400).send("O id da história está undefined!");
     } else {
         historiaModel.buscarPorId(idHistoria)
             .then(
@@ -121,7 +96,9 @@ function buscarPorId(req, res) {
                 }
             ).catch(
                 function (erro) {
-                    responderErro(res, erro, "Houve um erro ao buscar a história!");
+                    console.log(erro);
+                    console.log("Houve um erro ao buscar a história: ", erro.sqlMessage);
+                    res.status(500).json(erro.sqlMessage);
                 }
             );
     }
@@ -130,8 +107,8 @@ function buscarPorId(req, res) {
 function apagar(req, res) {
     var idHistoria = req.params.idHistoria;
 
-    if (estaVazio(idHistoria)) {
-        res.status(400).send("Informe a história que deseja apagar.");
+    if (idHistoria == undefined) {
+        res.status(400).send("O id da história está undefined!");
     } else {
         historiaModel.apagar(idHistoria)
             .then(
@@ -140,7 +117,9 @@ function apagar(req, res) {
                 }
             ).catch(
                 function (erro) {
-                    responderErro(res, erro, "Houve um erro ao apagar a história!");
+                    console.log(erro);
+                    console.log("Houve um erro ao apagar a história: ", erro.sqlMessage);
+                    res.status(500).json(erro.sqlMessage);
                 }
             );
     }
@@ -148,32 +127,58 @@ function apagar(req, res) {
 
 function atualizar(req, res) {
     var idHistoria = req.params.idHistoria;
-    var dados = lerHistoriaDoBody(req);
-    var erroValidacao = validarHistoria(dados);
+    var nomeMusica = req.body.nomeMusicaServer;
+    var artista = req.body.artistaServer;
+    var dataMusica = req.body.dataMusicaServer;
+    var trecho = req.body.trechoServer;
+    var textoCompleto = req.body.textoCompletoServer;
+    var impacto = req.body.impactoServer;
+    var fkFaseVida = req.body.fkFaseVidaServer;
+    var fkGenero = req.body.fkGeneroServer;
 
-    if (estaVazio(idHistoria)) {
-        res.status(400).send("Informe a história que deseja atualizar.");
-    } else if (erroValidacao != null) {
-        res.status(400).send(erroValidacao);
+    if (idHistoria == undefined) {
+        res.status(400).send("O id da história está undefined!");
+    } else if (nomeMusica == undefined || nomeMusica == "") {
+        res.status(400).send("O nome da música está undefined!");
+    } else if (artista == undefined || artista == "") {
+        res.status(400).send("O artista está undefined!");
+    } else if (dataMusica == undefined || dataMusica == "") {
+        res.status(400).send("A data da música está undefined!");
+    } else if (trecho == undefined || trecho == "") {
+        res.status(400).send("O trecho está undefined!");
+    } else if (textoCompleto == undefined || textoCompleto == "") {
+        res.status(400).send("O texto completo está undefined!");
+    } else if (impacto == undefined || impacto == "") {
+        res.status(400).send("O impacto está undefined!");
+    } else if (impacto < 1 || impacto > 5) {
+        res.status(400).send("O impacto precisa ser um valor de 1 a 5!");
+    } else if (fkFaseVida == undefined || fkFaseVida == "") {
+        res.status(400).send("A fase da vida está undefined!");
+    } else if (fkGenero == undefined || fkGenero == "") {
+        res.status(400).send("O gênero musical está undefined!");
     } else {
-        historiaModel.atualizar(idHistoria, dados.nomeMusica, dados.artista, dados.dataMusica, dados.trecho, dados.textoCompleto, dados.impacto, dados.fkFaseVida, dados.fkGenero)
+        historiaModel.atualizar(idHistoria, nomeMusica, artista, dataMusica, trecho, textoCompleto, impacto, fkFaseVida, fkGenero)
             .then(
                 function (resultado) {
                     res.json(resultado);
                 }
             ).catch(
                 function (erro) {
-                    responderErro(res, erro, "Houve um erro ao atualizar a história!");
+                    console.log(erro);
+                    console.log("Houve um erro ao atualizar a história: ", erro.sqlMessage);
+                    res.status(500).json(erro.sqlMessage);
                 }
             );
     }
 }
 
+// Junta num só JSON tudo que a dashboard precisa, para a tela não ter
+// que fazer oito requisições separadas.
 function dadosDashboard(req, res) {
     var idUsuario = req.params.idUsuario;
 
-    if (estaVazio(idUsuario)) {
-        res.status(400).send("Informe o usuário da dashboard.");
+    if (idUsuario == undefined) {
+        res.status(400).send("O id do usuário está undefined!");
     } else {
         Promise.all([
             historiaModel.contarPorUsuario(idUsuario),
@@ -199,7 +204,9 @@ function dadosDashboard(req, res) {
             }
         ).catch(
             function (erro) {
-                responderErro(res, erro, "Houve um erro ao buscar os dados da dashboard!");
+                console.log(erro);
+                console.log("Houve um erro ao buscar os dados da dashboard: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
             }
         );
     }

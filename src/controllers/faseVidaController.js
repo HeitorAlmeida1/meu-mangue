@@ -8,8 +8,9 @@ function listar(req, res) {
             }
         ).catch(
             function (erro) {
-                console.log("\nHouve um erro ao listar as fases da vida! Erro: ", erro.sqlMessage || erro);
-                res.status(500).send("Não foi possível carregar as fases da vida.");
+                console.log(erro);
+                console.log("Houve um erro ao listar as fases da vida: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
             }
         );
 }
