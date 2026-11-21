@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link rel="shortcut icon" href="../assets/icon/favicon2.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaTech | Espécies</title>
+
+    <link rel="stylesheet" href="./../css/dashboards.css">
+    <link rel="stylesheet" href="./../css/estilo.css" />
+    <script src="../js/sessao.js"></script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body onload="inicializarPagina()" style="background-color: #161618;">
+    <div class="janela">
+        <div class="header-left">
+            <h1>AquaTech</h1>
+
+            <div class="hello">
+                <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="./cards.html">
+                    <h3>Aquários e Terrários</h3>
+                </a>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="./dashboard.html">
+                    <h3>Gráficos</h3>
+                </a>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="./mural.html">
+                    <h3>Mural de Avisos</h3>
+                </a>
+            </div>
+
+            <div class="btn-nav">
+                <h3>Espécies</h3>
+            </div>
+
+            <div class="btn-logout" onclick="limparSessao()">
+                <h3>Sair</h3>
+            </div>
+        </div>
+
+        <div class="dash-right">
+            <div class="avisos especies-page">
+                <div class="container">
+                    <h1>Cadastro de espécies</h1>
+
+                    <div class="div-form especie-form-grid">
+                        <label>
+                            Nome
+                            <input id="input_nome_especie" type="text" maxlength="120" placeholder="Ex.: Tetra Neon">
+                        </label>
+
+                        <label>
+                            Tipo de água
+                            <select id="select_tipo_agua">
+                                <option value="DOCE">Doce</option>
+                                <option value="SALGADA">Salgada</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Tamanho médio (cm)
+                            <input id="input_tamanho_medio" type="number" min="0.1" step="0.1" placeholder="Ex.: 4.5">
+                        </label>
+
+                        <button onclick="cadastrarEspecie()">Cadastrar espécie</button>
+                    </div>
+
+                    <h1>Alocar espécie em aquário</h1>
+                    <div class="div-form especie-form-grid">
+                        <label>
+                            Espécie aprovada
+                            <select id="select_especie"></select>
+                        </label>
+
+                        <label>
+                            Aquário
+                            <select id="select_aquario"></select>
+                        </label>
+
+                        <button onclick="alocarEspecie()">Solicitar alocação</button>
+                    </div>
+
+                    <h1>Espécies cadastradas</h1>
+                    <div id="lista_especies" class="feed-container lista-especies"></div>
+
+                    <h1 id="titulo_pendencias">Pendências de aprovação</h1>
+                    <div id="lista_pendencias" class="feed-container lista-especies"></div>
+
+                    <h1>Alocações</h1>
+                    <div id="lista_alocacoes" class="feed-container lista-especies"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    function obterContexto() {
+        return {
+            idUsuario: Number(sessionStorage.ID_USUARIO),
+            empresaId: Number(sessionStorage.EMPRESA_ID),
+            tipoUsuario: String(sessionStorage.TIPO_USUARIO || "").toUpperCase(),
+        };
+    }
+
+    function inicializarPagina() {
+        validarSessao();
+        b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+
+        const contexto = obterContexto();
+        if (!contexto.empresaId) {
+            alert("Empresa não identificada na sessão.");
+            return;
+        }
+
+        atualizarVisibilidadeSupervisor(contexto.tipoUsuario);
+        preencherAquarios();
+        carregarEspecies();
+        carregarPendencias();
+        carregarAlocacoes();
+    }
+
+    function atualizarVisibilidadeSupervisor(tipoUsuario) {
+        const podeAprovar = tipoUsuario === "SUPERVISOR";
+        document.getElementById("titulo_pendencias").style.display = podeAprovar ? "block" : "none";
+        document.getElementById("lista_pendencias").style.display = podeAprovar ? "block" : "none";
+    }
+
+    function preencherAquarios() {
+        const aquarios = JSON.parse(sessionStorage.AQUARIOS || "[]");
+        const selectAquario = document.getElementById("select_aquario");
+        selectAquario.innerHTML = "";
+
+        aquarios.forEach(aquario => {
+            selectAquario.innerHTML += `<option value="${aquario.id}">${aquario.descricao} (${aquario.tipoAgua || "N/A"})</option>`;
+        });
+    }
+
+    function carregarEspecies() {
+        const contexto = obterContexto();
+
+        fetch(`/especies/empresa/${contexto.empresaId}`)
+            .then(res => res.json())
+            .then(dados => {
+                const lista = document.getElementById("lista_especies");
+                const selectEspecie = document.getElementById("select_especie");
+
+                lista.innerHTML = "";
+                selectEspecie.innerHTML = "";
+
+                if (!dados.length) {
+                    lista.innerHTML = `<div class="publicacao"><span>Nenhuma espécie cadastrada.</span></div>`;
+                    return;
+                }
+
+                dados.forEach(item => {
+                    lista.innerHTML += `
+                        <div class="publicacao">
+                            <span><b>${item.nome}</b> (${item.tipoAgua})</span>
+                            <span>Tamanho médio: ${Number(item.tamanhoMedioCm).toFixed(1)} cm</span>
+                            <span>Status: <b>${item.statusAprovacao}</b></span>
+                            <span>Criador: ${item.usuarioCriador}</span>
+                        </div>
+                    `;
+
+                    if (item.statusAprovacao === "APROVADA") {
+                        selectEspecie.innerHTML += `<option value="${item.id}">${item.nome} (${item.tipoAgua})</option>`;
+                    }
+                });
+
+                if (!selectEspecie.innerHTML) {
+                    selectEspecie.innerHTML = `<option value="">Nenhuma espécie aprovada</option>`;
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Erro ao carregar espécies.");
+            });
+    }
+
+    function carregarPendencias() {
+        const contexto = obterContexto();
+        const lista = document.getElementById("lista_pendencias");
+
+        if (contexto.tipoUsuario !== "SUPERVISOR") {
+            return;
+        }
+
+        fetch(`/especies/pendentes/${contexto.empresaId}`)
+            .then(res => res.json())
+            .then(dados => {
+                lista.innerHTML = "";
+
+                if (!dados.length) {
+                    lista.innerHTML = `<div class="publicacao"><span>Sem pendências de aprovação.</span></div>`;
+                    return;
+                }
+
+                dados.forEach(item => {
+                    lista.innerHTML += `
+                        <div class="publicacao">
+                            <span><b>${item.nome}</b> (${item.tipoAgua}) - ${Number(item.tamanhoMedioCm).toFixed(1)} cm</span>
+                            <span>Criador: ${item.usuarioCriador}</span>
+                            <div class="div-buttons">
+                                <button class="publicacao-btn-editar" onclick="aprovar(${item.id})">Aprovar</button>
+                                <button class="publicacao-btn-editar" onclick="rejeitar(${item.id})">Rejeitar</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Erro ao carregar pendências.");
+            });
+    }
+
+    function carregarAlocacoes() {
+        const contexto = obterContexto();
+
+        fetch(`/especies/alocacoes/empresa/${contexto.empresaId}`)
+            .then(res => res.json())
+            .then(dados => {
+                const lista = document.getElementById("lista_alocacoes");
+                lista.innerHTML = "";
+
+                if (!dados.length) {
+                    lista.innerHTML = `<div class="publicacao"><span>Nenhuma alocação registrada.</span></div>`;
+                    return;
+                }
+
+                dados.forEach(item => {
+                    lista.innerHTML += `
+                        <div class="publicacao">
+                            <span><b>${item.especie}</b> -> ${item.aquario}</span>
+                            <span>Status: <b>${item.statusAprovacao}</b></span>
+                            <span>Tipo de água: ${item.tipoAguaEspecie} / ${item.tipoAguaAquario}</span>
+                        </div>
+                    `;
+                });
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+
+    function cadastrarEspecie() {
+        const contexto = obterContexto();
+        const nome = document.getElementById("input_nome_especie").value;
+        const tipoAgua = document.getElementById("select_tipo_agua").value;
+        const tamanhoMedioCm = Number(document.getElementById("input_tamanho_medio").value);
+
+        if (!nome || !tipoAgua || !tamanhoMedioCm) {
+            alert("Preencha todos os campos da espécie.");
+            return;
+        }
+
+        fetch("/especies/cadastrar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                nome,
+                tipoAgua,
+                tamanhoMedioCm,
+                idUsuario: contexto.idUsuario,
+                idEmpresa: contexto.empresaId,
+                tipoUsuario: contexto.tipoUsuario,
+            }),
+        })
+            .then(async resposta => {
+                if (!resposta.ok) {
+                    throw new Error(await resposta.text());
+                }
+
+                alert("Espécie cadastrada com sucesso.");
+                document.getElementById("input_nome_especie").value = "";
+                document.getElementById("input_tamanho_medio").value = "";
+                carregarEspecies();
+                carregarPendencias();
+            })
+            .catch(err => {
+                alert(err.message || "Erro ao cadastrar espécie.");
+            });
+    }
+
+    function aprovar(idEspecie) {
+        const contexto = obterContexto();
+
+        fetch(`/especies/${idEspecie}/aprovar`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                idUsuario: contexto.idUsuario,
+                tipoUsuario: contexto.tipoUsuario,
+            }),
+        })
+            .then(async resposta => {
+                if (!resposta.ok) {
+                    throw new Error(await resposta.text());
+                }
+
+                carregarEspecies();
+                carregarPendencias();
+                alert("Espécie aprovada.");
+            })
+            .catch(err => alert(err.message || "Erro ao aprovar espécie."));
+    }
+
+    function rejeitar(idEspecie) {
+        const contexto = obterContexto();
+
+        fetch(`/especies/${idEspecie}/rejeitar`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                idUsuario: contexto.idUsuario,
+                tipoUsuario: contexto.tipoUsuario,
+            }),
+        })
+            .then(async resposta => {
+                if (!resposta.ok) {
+                    throw new Error(await resposta.text());
+                }
+
+                carregarEspecies();
+                carregarPendencias();
+                alert("Espécie rejeitada.");
+            })
+            .catch(err => alert(err.message || "Erro ao rejeitar espécie."));
+    }
+
+    function alocarEspecie() {
+        const contexto = obterContexto();
+        const idEspecie = Number(document.getElementById("select_especie").value);
+        const idAquario = Number(document.getElementById("select_aquario").value);
+
+        if (!idEspecie || !idAquario) {
+            alert("Selecione uma espécie aprovada e um aquário.");
+            return;
+        }
+
+        fetch("/especies/alocar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                idEspecie,
+                idAquario,
+                idUsuario: contexto.idUsuario,
+                tipoUsuario: contexto.tipoUsuario,
+            }),
+        })
+            .then(async resposta => {
+                if (!resposta.ok) {
+                    throw new Error(await resposta.text());
+                }
+
+                alert("Solicitação de alocação registrada.");
+                carregarAlocacoes();
+                carregarEspecies();
+            })
+            .catch(err => alert(err.message || "Erro ao alocar espécie."));
+    }
+</script>
